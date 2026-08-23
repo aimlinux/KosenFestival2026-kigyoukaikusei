@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Person Card Studio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">PERSON CARD STUDIO</p>
+        <h1>人物カード作成アプリ</h1>
+        <p class="sub">入力 → プレビュー → 保存 → PNG出力 → A5印刷まで、この画面だけで完結。</p>
+      </div>
+      <div class="header-actions">
+        <button id="newBtn" class="btn ghost">新規</button>
+        <button id="saveBtn" class="btn primary">保存</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="panel form-panel">
+        <div class="panel-title">
+          <div>
+            <span class="step">STEP 1</span>
+            <h2>プロフィール入力</h2>
+          </div>
+          <span id="status" class="status">未保存</span>
+        </div>
+
+        <form id="profileForm">
+          <label>人物の名前
+            <input id="name" maxlength="30" placeholder="例：小原和真" required>
+          </label>
+
+          <div class="two-col">
+            <label>クラス
+              <input id="className" maxlength="20" placeholder="例：5J">
+            </label>
+            <label>ニックネーム
+              <input id="nickname" maxlength="30" placeholder="例：かずま">
+            </label>
+          </div>
+
+          <div class="hobby-head">
+            <label class="section-label">趣味（1〜6個）</label>
+            <span id="hobbyCount">0 / 6</span>
+          </div>
+
+          <div id="hobbyInputs" class="hobbies"></div>
+          <button type="button" id="addHobbyBtn" class="btn small">＋ 趣味を追加</button>
+
+          <label class="talent-label">隠れた特技
+            <input id="talent" maxlength="40" placeholder="例：指パッチン">
+          </label>
+
+          <div class="divider"></div>
+
+          <div class="panel-title compact">
+            <div>
+              <span class="step">STEP 2</span>
+              <h2>デザイン設定</h2>
+            </div>
+          </div>
+
+          <div class="two-col">
+            <label>テーマ
+              <select id="theme">
+                <option value="purple">Purple Night</option>
+                <option value="blue">Blue Wave</option>
+                <option value="green">Aurora Green</option>
+              </select>
+            </label>
+            <label>向き
+              <select id="orientation">
+                <option value="landscape">A5 横</option>
+                <option value="portrait">A5 縦</option>
+              </select>
+            </label>
+          </div>
+
+          <label>ハッシュタグ（自動生成・編集可）
+            <input id="tags" maxlength="180" placeholder="#ギター #魚釣り #ゲーム">
+          </label>
+        </form>
+
+        <div class="saved-area">
+          <div class="saved-head">
+            <h3>保存済みプロフィール</h3>
+            <button id="clearAllBtn" class="text-btn">全削除</button>
+          </div>
+          <div id="savedList" class="saved-list"></div>
+        </div>
+      </section>
+
+      <section class="panel preview-panel">
+        <div class="panel-title">
+          <div>
+            <span class="step">STEP 3</span>
+            <h2>完成イメージ</h2>
+          </div>
+          <div class="preview-actions">
+            <button id="pngBtn" class="btn small">PNG出力</button>
+            <button id="printBtn" class="btn small primary">A5印刷</button>
+          </div>
+        </div>
+
+        <div id="previewStage" class="preview-stage landscape">
+          <article id="card" class="person-card theme-purple">
+            <div class="glow glow-one"></div>
+            <div class="glow glow-two"></div>
+            <div class="line"></div>
+
+            <div class="card-content">
+              <div class="identity">
+                <div class="name-row">
+                  <span id="previewClass" class="preview-class">5J</span>
+                  <h3 id="previewName">小原和真</h3>
+                </div>
+                <div id="previewNickname" class="nickname">jr（ジュニア）</div>
+              </div>
+
+              <div id="previewTags" class="tags">#ギター　#ワンオク　#魚釣り　#恋バナ　#BTS</div>
+
+              <div class="talent-box">
+                <p>隠れた特技：</p>
+                <strong id="previewTalent">指パッチン</strong>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="export-note">
+          <span>✓</span>
+          <p><strong>A5サイズ対応</strong><br>印刷時は「実際のサイズ / 100%」を選択するとカードサイズがA5になります。</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
