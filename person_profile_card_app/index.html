@@ -14,7 +14,7 @@
         <h1>人物カード作成アプリ</h1>
         <p class="sub">入力 → プレビュー → 保存 → PNG出力 → A5印刷まで、この画面だけで完結。</p>
       </div>
-      <div class="header-actions">
+      <div class="header-actions">,,,,,,
         <button id="newBtn" class="btn ghost">新規</button>
         <button id="saveBtn" class="btn primary">保存</button>
       </div>
@@ -86,59 +86,121 @@
           </label>
         </form>
 
-        <div class="saved-area">
-          <div class="saved-head">
-            <h3>保存済みプロフィール</h3>
-            <button id="clearAllBtn" class="text-btn">全削除</button>
-          </div>
-          <div id="savedList" class="saved-list"></div>
-        </div>
-      </section>
+  <div class="saved-area">
 
-      <section class="panel preview-panel">
-        <div class="panel-title">
-          <div>
-            <span class="step">STEP 3</span>
-            <h2>完成イメージ</h2>
-          </div>
-          <div class="preview-actions">
-            <button id="pngBtn" class="btn small">PNG出力</button>
-            <button id="printBtn" class="btn small primary">A5印刷</button>
-          </div>
-        </div>
+    <!-- 一覧のタイトル -->
+    <div class="saved-head">
+      <div>
+        <h3>人物一覧管理</h3>
+        <span id="profileCount" class="list-count">0人</span>
+      </div>
 
-        <div id="previewStage" class="preview-stage landscape">
-          <article id="card" class="person-card theme-purple">
-            <div class="glow glow-one"></div>
-            <div class="glow glow-two"></div>
-            <div class="line"></div>
+      <div class="list-actions">
+        <button id="exportCsvBtn" class="text-btn">
+          CSV出力
+        </button>
 
-            <div class="card-content">
-              <div class="identity">
-                <div class="name-row">
-                  <span id="previewClass" class="preview-class">5J</span>
-                  <h3 id="previewName">小原和真</h3>
-                </div>
-                <div id="previewNickname" class="nickname">jr（ジュニア）</div>
-              </div>
+        <button id="clearAllBtn" class="text-btn danger-text">
+          全削除
+        </button>
+      </div>
+    </div>
 
-              <div id="previewTags" class="tags">#ギター　#ワンオク　#魚釣り　#恋バナ　#BTS</div>
 
-              <div class="talent-box">
-                <p>隠れた特技：</p>
-                <strong id="previewTalent">指パッチン</strong>
-              </div>
-            </div>
-          </article>
-        </div>
+    <!-- 検索・並び替え -->
+    <div class="list-toolbar">
 
-        <div class="export-note">
-          <span>✓</span>
-          <p><strong>A5サイズ対応</strong><br>印刷時は「実際のサイズ / 100%」を選択するとカードサイズがA5になります。</p>
-        </div>
-      </section>
-    </main>
+      <input
+        id="profileSearch"
+        class="search-input"
+        placeholder="🔎 名前・クラス・趣味で検索"
+      >
+
+      <select id="profileSort" class="sort-select">
+        <option value="updated-desc">更新順</option>
+        <option value="name-asc">名前順</option>
+        <option value="class-asc">クラス順</option>
+      </select>
+
+    </div>
+
+
+    <!-- 一括操作 -->
+    <div class="bulk-toolbar">
+
+      <label class="select-all-label">
+        <input
+          id="selectAllProfiles"
+          type="checkbox"
+        >
+        全選択
+      </label>
+
+      <span id="selectedCount">
+        0人選択中
+      </span>
+
+      <button
+        id="bulkDeleteBtn"
+        class="btn small danger-btn"
+        disabled
+      >
+        選択を削除
+      </button>
+
+    </div>
+
+
+    <!-- 人物一覧 -->
+    <div id="savedList" class="saved-list"></div>
+
   </div>
+        </section>
+
+        <section class="panel preview-panel">
+          <div class="panel-title">
+            <div>
+              <span class="step">STEP 3</span>
+              <h2>完成イメージ</h2>
+            </div>
+            <div class="preview-actions">
+              <button id="pngBtn" class="btn small">PNG出力</button>
+              <button id="printBtn" class="btn small primary">A5印刷</button>
+            </div>
+          </div>
+
+          <div id="previewStage" class="preview-stage landscape">
+            <article id="card" class="person-card theme-purple">
+              <div class="glow glow-one"></div>
+              <div class="glow glow-two"></div>
+              <div class="line"></div>
+
+              <div class="card-content">
+                <div class="identity">
+                  <div class="name-row">
+                    <span id="previewClass" class="preview-class">5J</span>
+                    <h3 id="previewName">小原和真</h3>
+                  </div>
+                  <div id="previewNickname" class="nickname">jr（ジュニア）</div>
+                </div>
+
+                <div id="previewTags" class="tags">#ギター　#ワンオク　#魚釣り　#恋バナ　#BTS</div>
+
+                <div class="talent-box">
+                  <p>隠れた特技：</p>
+                  <strong id="previewTalent">指パッチン</strong>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="export-note">
+            <span>✓</span>
+            <p><strong>A5サイズ対応</strong><br>印刷時は「実際のサイズ / 100%」を選択するとカードサイズがA5になります。</p>
+          </div>
+        </section>
+      </main>
+    </div>
 
   <div id="toast" class="toast"></div>
   <script src="app.js"></script>

@@ -26,7 +26,14 @@ const els = {
   previewNickname: $("previewNickname"),
   previewTags: $("previewTags"),
   previewTalent: $("previewTalent"),
-  toast: $("toast")
+  toast: $("toast"),
+  profileCount: $("profileCount"),
+  profileSearch: $("profileSearch"),
+  profileSort: $("profileSort"),
+  selectAllProfiles: $("selectAllProfiles"),
+  selectedCount: $("selectedCount"),
+  bulkDeleteBtn: $("bulkDeleteBtn"),
+  exportCsvBtn: $("exportCsvBtn")
 };
 
 let currentId = null;
@@ -189,40 +196,577 @@ function deleteProfile(id) {
 }
 
 function renderSavedList() {
-  const profiles = loadProfiles();
+
+  let profiles = loadProfiles();
+
+  // =========================
+  // 検索
+  // =========================
+
+  const search = els.profileSearch.value
+    .trim()
+    .toLowerCase();
+
+  if (search) {
+
+    profiles = profiles.filter(profile => {
+
+      const text = [
+        profile.name,
+        profile.className,
+        profile.nickname,
+        ...(profile.hobbies || []),
+        profile.talent,
+        profile.tags
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      return text.includes(search);
+    });
+  }
+
+
+  // =========================
+  // 並び替え
+  // =========================
+
+  const sortType = els.profileSort.value;
+
+  profiles.sort((a, b) => {
+
+    if (sortType === "name-asc") {
+
+      return a.name.localeCompare(
+        b.name,
+        "ja"
+      );
+
+    }
+
+    if (sortType === "class-asc") {
+
+      return a.className.localeCompare(
+        b.className,
+        "ja"
+      );
+
+    }
+
+    // 更新順
+    return new Date(b.updatedAt) -
+           new Date(a.updatedAt);
+  });
+
+
+  // =========================
+  // 人数表示
+  // =========================
+
+  const allProfiles = loadProfiles();
+
+  els.profileCount.textContent =
+    `${allProfiles.length}人`;
+
+
+  // =========================
+  // 一覧をクリア
+  // =========================
+
   els.savedList.innerHTML = "";
 
+
+  // =========================
+  // データがない場合
+  // =========================
+
   if (!profiles.length) {
+
     const empty = document.createElement("div");
+
     empty.className = "empty";
-    empty.textContent = "まだ保存されていません";
+
+    empty.textContent =
+      search
+        ? "検索結果がありません"
+        : "まだ保存されていません";
+
     els.savedList.appendChild(empty);
+
+    updateSelectionUI();
+
     return;
   }
 
-  profiles.forEach(profile => {
-    const item = document.createElement("div");
-    item.className = "saved-item";
 
-    const main = document.createElement("div");
-    main.className = "saved-item-main";
+  // =========================
+  // 選択状態を保持
+  // =========================
+
+  const selectedIds =
+    new Set(getSelectedIds());
+
+
+  // =========================
+  // 人物カードを生成
+  // =========================
+
+  profiles.forEach(profile => {
+
+    const item =
+      document.createElement("div");
+
+    item.className =
+      "saved-item";
+
+
+    // -------------------------
+    // チェックボックス
+    // -------------------------
+
+    const checkWrap =
+      document.createElement("label");
+
+    checkWrap.className =
+      "profile-check-wrap";
+
+
+    const check =
+      document.createElement("input");
+
+    check.type = "checkbox";
+
+    check.className =
+      "profile-check";
+
+    check.dataset.id =
+      profile.id;
+
+    check.checked =
+      selectedIds.has(profile.id);
+
+
+    check.addEventListener(
+      "change",
+      updateSelectionUI
+    );
+
+
+    checkWrap.appendChild(check);
+
+
+    // -------------------------
+    // 人物情報
+    // -------------------------
+
+    const main =
+      document.createElement("div");
+
+    main.className =
+      "saved-item-main";
+
+
     main.innerHTML = `
       <div class="saved-item-name"></div>
+
       <div class="saved-item-meta"></div>
+
+      <div class="saved-item-tags"></div>
     `;
-    main.querySelector(".saved-item-name").textContent = profile.name;
-    main.querySelector(".saved-item-meta").textContent =
-      `${profile.className || "CLASS"} / ${(profile.hobbies || []).length}個の趣味`;
-    main.addEventListener("click", () => loadProfile(profile.id));
 
-    const del = document.createElement("button");
-    del.className = "delete-btn";
-    del.textContent = "削除";
-    del.addEventListener("click", () => deleteProfile(profile.id));
 
-    item.append(main, del);
+    main.querySelector(
+      ".saved-item-name"
+    ).textContent =
+      profile.name;
+
+
+    main.querySelector(
+      ".saved-item-meta"
+    ).textContent =
+      `${profile.className || "CLASS"} / ` +
+      `${(profile.hobbies || []).length}個の趣味` +
+      `${profile.nickname ? " / " + profile.nickname : ""}`;
+
+
+    main.querySelector(
+      ".saved-item-tags"
+    ).textContent =
+      autoTags(profile) || "タグなし";
+
+
+    // クリックで編集
+    main.addEventListener(
+      "click",
+      () => loadProfile(profile.id)
+    );
+
+
+    // -------------------------
+    // 操作ボタン
+    // -------------------------
+
+    const buttons =
+      document.createElement("div");
+
+    buttons.className =
+      "saved-item-buttons";
+
+
+    // 編集
+    const edit =
+      document.createElement("button");
+
+    edit.className =
+      "saved-action";
+
+    edit.textContent =
+      "編集";
+
+    edit.addEventListener(
+      "click",
+      () => loadProfile(profile.id)
+    );
+
+
+    // 複製
+    const duplicate =
+      document.createElement("button");
+
+    duplicate.className =
+      "saved-action";
+
+    duplicate.textContent =
+      "複製";
+
+    duplicate.addEventListener(
+      "click",
+      () => duplicateProfile(profile.id)
+    );
+
+
+    // 削除
+    const del =
+      document.createElement("button");
+
+    del.className =
+      "saved-action delete";
+
+    del.textContent =
+      "削除";
+
+    del.addEventListener(
+      "click",
+      () => deleteProfile(profile.id)
+    );
+
+
+    buttons.append(
+      edit,
+      duplicate,
+      del
+    );
+
+
+    // -------------------------
+    // 1人分を一覧に追加
+    // -------------------------
+
+    item.append(
+      checkWrap,
+      main,
+      buttons
+    );
+
     els.savedList.appendChild(item);
+
   });
+
+
+  updateSelectionUI();
+}
+
+function getSelectedIds() {
+
+  return Array.from(
+    document.querySelectorAll(
+      ".profile-check:checked"
+    )
+  ).map(
+    checkbox => checkbox.dataset.id
+  );
+
+}
+
+function updateSelectionUI() {
+
+  const selectedIds =
+    getSelectedIds();
+
+  const count =
+    selectedIds.length;
+
+
+  els.selectedCount.textContent =
+    `${count}人選択中`;
+
+
+  els.bulkDeleteBtn.disabled =
+    count === 0;
+
+
+  const checkboxes =
+    document.querySelectorAll(
+      ".profile-check"
+    );
+
+
+  const allChecked =
+    checkboxes.length > 0 &&
+    Array.from(checkboxes)
+      .every(
+        checkbox => checkbox.checked
+      );
+
+
+  els.selectAllProfiles.checked =
+    allChecked;
+
+}
+
+function duplicateProfile(id) {
+
+  const profiles =
+    loadProfiles();
+
+
+  const source =
+    profiles.find(
+      profile => profile.id === id
+    );
+
+
+  if (!source) {
+    return;
+  }
+
+
+  const copy = {
+
+    ...source,
+
+    id: crypto.randomUUID(),
+
+    name:
+      `${source.name}（コピー）`,
+
+    hobbies:
+      [...(source.hobbies || [])],
+
+    updatedAt:
+      new Date().toISOString()
+
+  };
+
+
+  profiles.unshift(copy);
+
+
+  saveProfiles(profiles);
+
+
+  currentId =
+    copy.id;
+
+
+  renderSavedList();
+
+
+  loadProfile(copy.id);
+
+
+  showToast(
+    "人物データを複製しました"
+  );
+
+}
+
+function bulkDeleteSelected() {
+
+  const ids =
+    getSelectedIds();
+
+
+  if (!ids.length) {
+    return;
+  }
+
+
+  const result =
+    confirm(
+      `${ids.length}人のプロフィールを削除しますか？`
+    );
+
+
+  if (!result) {
+    return;
+  }
+
+
+  const idSet =
+    new Set(ids);
+
+
+  const profiles =
+    loadProfiles().filter(
+      profile =>
+        !idSet.has(profile.id)
+    );
+
+
+  saveProfiles(profiles);
+
+
+  // 現在編集している人物も削除された場合
+  if (
+    currentId &&
+    idSet.has(currentId)
+  ) {
+    resetForm();
+  }
+
+
+  renderSavedList();
+
+
+  showToast(
+    `${ids.length}人を削除しました`
+  );
+
+}
+
+function exportProfilesCsv() {
+
+  const profiles =
+    loadProfiles();
+
+
+  if (!profiles.length) {
+
+    showToast(
+      "出力する人物がいません"
+    );
+
+    return;
+  }
+
+
+  // CSVで使えない文字を処理
+  const escapeCsv =
+    value =>
+      `"${String(value ?? "")
+        .replace(/"/g, '""')}"`;
+
+
+  const rows = [
+
+    [
+      "名前",
+      "クラス",
+      "ニックネーム",
+      "趣味1",
+      "趣味2",
+      "趣味3",
+      "趣味4",
+      "趣味5",
+      "趣味6",
+      "隠れた特技",
+      "ハッシュタグ"
+    ]
+
+  ];
+
+
+  profiles.forEach(profile => {
+
+    const hobbies =
+      profile.hobbies || [];
+
+
+    rows.push([
+
+      profile.name,
+
+      profile.className,
+
+      profile.nickname,
+
+      hobbies[0] || "",
+      hobbies[1] || "",
+      hobbies[2] || "",
+      hobbies[3] || "",
+      hobbies[4] || "",
+      hobbies[5] || "",
+
+      profile.talent,
+
+      autoTags(profile)
+
+    ]);
+
+  });
+
+
+  // BOMを付けることでExcelで文字化けしにくくする
+  const csv =
+    "\uFEFF" +
+    rows
+      .map(
+        row =>
+          row
+            .map(escapeCsv)
+            .join(",")
+      )
+      .join("\r\n");
+
+
+  const blob =
+    new Blob(
+      [csv],
+      {
+        type:
+          "text/csv;charset=utf-8"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(blob);
+
+
+  const a =
+    document.createElement("a");
+
+
+  a.href = url;
+
+
+  a.download =
+    `人物一覧_${new Date()
+      .toISOString()
+      .slice(0, 10)}.csv`;
+
+
+  a.click();
+
+
+  URL.revokeObjectURL(url);
+
+
+  showToast(
+    "人物一覧をCSV出力しました"
+  );
+
 }
 
 function wrapText(ctx, text, maxWidth, fontSize) {
@@ -397,6 +941,68 @@ els.form.addEventListener("input", updatePreview);
 els.theme.addEventListener("change", updatePreview);
 els.orientation.addEventListener("change", updatePreview);
 
+
+
+// ========================================
+// 人物一覧の操作
+// ========================================
+
+// 複数削除
+els.bulkDeleteBtn.addEventListener(
+  "click",
+  bulkDeleteSelected
+);
+
+
+// CSV出力
+els.exportCsvBtn.addEventListener(
+  "click",
+  exportProfilesCsv
+);
+
+
+// 検索
+els.profileSearch.addEventListener(
+  "input",
+  renderSavedList
+);
+
+
+// 並び替え
+els.profileSort.addEventListener(
+  "change",
+  renderSavedList
+);
+
+
+// 全選択
+els.selectAllProfiles.addEventListener(
+  "change",
+  () => {
+
+    const visibleChecks =
+      els.savedList.querySelectorAll(
+        ".profile-check"
+      );
+
+
+    visibleChecks.forEach(
+      checkbox => {
+
+        checkbox.checked =
+          els.selectAllProfiles.checked;
+
+      }
+    );
+
+
+    updateSelectionUI();
+
+  }
+);
+
+
 renderHobbies([]);
 renderSavedList();
 updatePreview();
+
