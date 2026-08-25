@@ -422,3 +422,263 @@ input:focus, select:focus {
 
   .export-note { display: none !important; }
 }
+
+
+/* =========================
+   人物一覧管理
+========================= */
+
+.saved-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.saved-head h3 {
+  margin: 0;
+}
+
+.list-count {
+  display: block;
+  margin-top: 3px;
+  color: #8d98ae;
+  font-size: 10px;
+}
+
+.list-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.danger-text {
+  color: #ff7f8c;
+}
+
+
+/* 検索・ソート */
+
+.list-toolbar {
+  display: grid;
+  grid-template-columns: 1fr 100px;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.search-input {
+  margin: 0;
+}
+
+.sort-select {
+  margin: 0;
+}
+
+
+/* 一括操作 */
+
+.bulk-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+
+  padding: 9px;
+
+  background: #090d16;
+
+  border:
+    1px solid rgba(255,255,255,.07);
+
+  border-radius: 9px;
+
+  font-size: 11px;
+
+  color: #9ca5bb;
+}
+
+.select-all-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.select-all-label input {
+  width: auto;
+  margin: 0;
+}
+
+.bulk-toolbar #selectedCount {
+  margin-right: auto;
+}
+
+
+/* 削除ボタン */
+
+.danger-btn {
+  color: #ff9aa4;
+}
+
+.danger-btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+
+/* 人物一覧 */
+
+.saved-list {
+  display: grid;
+  gap: 7px;
+
+  max-height: 350px;
+
+  overflow-y: auto;
+}
+
+
+/* 1人分 */
+
+.saved-item {
+  display: grid;
+
+  grid-template-columns:
+    auto 1fr auto;
+
+  gap: 9px;
+
+  align-items: center;
+
+  padding: 10px;
+
+  background: #0b0f18;
+
+  border:
+    1px solid rgba(255,255,255,.08);
+
+  border-radius: 10px;
+
+  transition: .15s;
+}
+
+.saved-item:hover {
+  background: #101522;
+
+  border-color:
+    rgba(111,44,255,.3);
+}
+
+
+/* チェック */
+
+.profile-check-wrap {
+  display: flex;
+
+  align-items: center;
+
+  margin: 0;
+}
+
+.profile-check {
+  width: auto;
+
+  margin: 0;
+
+  cursor: pointer;
+}
+
+
+/* 人物情報 */
+
+.saved-item-main {
+  min-width: 0;
+
+  cursor: pointer;
+}
+
+.saved-item-name {
+  font-size: 13px;
+
+  font-weight: 700;
+
+  color: #f4f6ff;
+}
+
+.saved-item-meta {
+  margin-top: 3px;
+
+  font-size: 10px;
+
+  color: #8993aa;
+}
+
+.saved-item-tags {
+  margin-top: 4px;
+
+  font-size: 9px;
+
+  color: #00baff;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+/* 編集・複製・削除 */
+
+.saved-item-buttons {
+  display: flex;
+
+  gap: 4px;
+}
+
+.saved-action {
+  padding: 5px 7px;
+
+  border:
+    1px solid rgba(255,255,255,.08);
+
+  background: #111725;
+
+  color: #aeb7c9;
+
+  border-radius: 7px;
+
+  font-size: 9px;
+
+  cursor: pointer;
+}
+
+.saved-action:hover {
+  background: #1a2132;
+
+  color: white;
+}
+
+.saved-action.delete {
+  color: #ff858f;
+}
+
+
+/* スマホ */
+
+@media (max-width: 560px) {
+
+  .list-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .saved-item {
+    grid-template-columns:
+      auto 1fr;
+  }
+
+  .saved-item-buttons {
+    grid-column: 2;
+  }
+
+}
