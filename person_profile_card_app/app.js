@@ -1,5 +1,7 @@
+// DOM要素を簡単に取得するためのショートカット
 const $ = (id) => document.getElementById(id);
 
+// 画面上のフォーム・プレビュー・一覧などの要素をまとめて管理
 const els = {
   form: $("profileForm"),
   name: $("name"),
@@ -36,11 +38,14 @@ const els = {
   exportCsvBtn: $("exportCsvBtn")
 };
 
+// 現在編集中のプロフィールIDと趣味入力の一時状態
 let currentId = null;
 let hobbyValues = [];
 
+// ローカルストレージの保存先キー
 const STORAGE_KEY = "person-card-studio-profiles-v1";
 
+// トースト通知を表示して一定時間後に非表示にする
 function showToast(message) {
   els.toast.textContent = message;
   els.toast.classList.add("show");
@@ -88,6 +93,7 @@ function renderHobbies(values = hobbyValues) {
   els.addHobbyBtn.disabled = hobbyValues.length >= 6;
 }
 
+// フォームの入力内容をプロフィールオブジェクトに変換する
 function getProfileFromForm() {
   const hobbies = hobbyValues.map(normalizeText).filter(Boolean);
   return {
@@ -104,11 +110,13 @@ function getProfileFromForm() {
   };
 }
 
+// タグが未入力なら趣味から自動生成する
 function autoTags(profile) {
   if (profile.tags) return profile.tags;
   return profile.hobbies.map(h => "#" + h.replace(/\s+/g, "")).join("　");
 }
 
+// 入力内容をリアルタイムでカードプレビューへ反映する
 function updatePreview() {
   const profile = getProfileFromForm();
 
@@ -127,6 +135,7 @@ function updatePreview() {
   els.status.textContent = currentId ? "編集モード" : "未保存";
 }
 
+// フォームを初期状態に戻して新規作成モードへ切り替える
 function resetForm() {
   currentId = null;
   els.form.reset();
@@ -137,6 +146,7 @@ function resetForm() {
   updatePreview();
 }
 
+// 保存済みプロフィールをローカルストレージから読み込む
 function loadProfiles() {
   try {
     return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -145,6 +155,7 @@ function loadProfiles() {
   }
 }
 
+// プロフィール一覧をローカルストレージに保存する
 function saveProfiles(profiles) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(profiles));
 }
@@ -777,6 +788,7 @@ function wrapText(ctx, text, maxWidth, fontSize) {
   return lines;
 }
 
+// プロフィールをA5相当のキャンバスに描画してPNG出力用の画像を生成する
 function drawCardToCanvas(profile, width = 2480, height = 1748) {
   const canvas = document.createElement("canvas");
   const portrait = profile.orientation === "portrait";
@@ -936,6 +948,7 @@ els.orientation.addEventListener("change", updatePreview);
 // ========================================
 // 人物一覧の操作
 // ========================================
+// 検索・並び替え・選択状態の管理をイベント駆動で行う
 
 // 複数削除
 els.bulkDeleteBtn.addEventListener(
