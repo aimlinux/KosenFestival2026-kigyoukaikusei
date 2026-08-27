@@ -568,22 +568,16 @@ function duplicateProfile(id) {
 
   };
 
-
   profiles.unshift(copy);
 
-
   saveProfiles(profiles);
-
 
   currentId =
     copy.id;
 
-
   renderSavedList();
 
-
   loadProfile(copy.id);
-
 
   showToast(
     "人物データを複製しました"
@@ -596,22 +590,18 @@ function bulkDeleteSelected() {
   const ids =
     getSelectedIds();
 
-
   if (!ids.length) {
     return;
   }
-
 
   const result =
     confirm(
       `${ids.length}人のプロフィールを削除しますか？`
     );
 
-
   if (!result) {
     return;
   }
-
 
   const idSet =
     new Set(ids);
