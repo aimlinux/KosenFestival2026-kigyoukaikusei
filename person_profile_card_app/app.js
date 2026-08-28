@@ -1,4 +1,8 @@
 // DOM要素を簡単に取得するためのショートカット
+
+// DOMとは
+// Document Object Model（ドキュメント・オブジェクト・モデル）の略で、
+// HTMLやXMLの文書をJavaScriptなどのプログラムから操作・変更できるようにする仕組み
 const $ = (id) => document.getElementById(id);
 
 // 画面上のフォーム・プレビュー・一覧などの要素をまとめて管理
@@ -670,7 +674,6 @@ function exportProfilesCsv() {
 
 
   const rows = [
-
     [
       "名前",
       "クラス",
@@ -684,15 +687,12 @@ function exportProfilesCsv() {
       "隠れた特技",
       "ハッシュタグ"
     ]
-
   ];
-
 
   profiles.forEach(profile => {
 
     const hobbies =
       profile.hobbies || [];
-
 
     rows.push([
 
