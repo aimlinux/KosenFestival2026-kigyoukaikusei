@@ -740,29 +740,22 @@ function exportProfilesCsv() {
       }
     );
 
-
   const url =
     URL.createObjectURL(blob);
-
 
   const a =
     document.createElement("a");
 
-
   a.href = url;
-
 
   a.download =
     `人物一覧_${new Date()
       .toISOString()
       .slice(0, 10)}.csv`;
 
-
   a.click();
 
-
   URL.revokeObjectURL(url);
-
 
   showToast(
     "人物一覧をCSV出力しました"
@@ -944,7 +937,6 @@ els.theme.addEventListener("change", updatePreview);
 els.orientation.addEventListener("change", updatePreview);
 
 
-
 // ========================================
 // 人物一覧の操作
 // ========================================
@@ -956,23 +948,20 @@ els.bulkDeleteBtn.addEventListener(
   bulkDeleteSelected
 );
 
-
 // CSV出力
 els.exportCsvBtn.addEventListener(
   "click",
   exportProfilesCsv
 );
 
-
 // 検索
 els.profileSearch.addEventListener(
   "input",
   renderSavedList
 );
-
-
 // 並び替え
-els.profileSort.addEventListener(
+els.profileSort.addEven
+tListener(
   "change",
   renderSavedList
 );
