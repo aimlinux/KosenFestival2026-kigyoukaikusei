@@ -959,13 +959,12 @@ els.profileSearch.addEventListener(
   "input",
   renderSavedList
 );
+
 // 並び替え
-els.profileSort.addEven
-tListener(
+els.profileSort.addEventListener(
   "change",
   renderSavedList
 );
-
 
 // 全選択
 els.selectAllProfiles.addEventListener(
@@ -977,7 +976,6 @@ els.selectAllProfiles.addEventListener(
         ".profile-check"
       );
 
-
     visibleChecks.forEach(
       checkbox => {
 
@@ -986,7 +984,6 @@ els.selectAllProfiles.addEventListener(
 
       }
     );
-
 
     updateSelectionUI();
 
