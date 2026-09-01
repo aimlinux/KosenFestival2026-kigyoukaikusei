@@ -143,7 +143,12 @@ function updatePreview() {
 function resetForm() {
   currentId = null;
   els.form.reset();
-  hobbyValues = [];
+  els.name.value = "小原和真";
+  els.className.value = "5J";
+  els.nickname.value = "jr（ジュニア）";
+  els.talent.value = "指パッチン";
+  els.tags.value = "#ギター #ワンオク #魚釣り #恋バナ #BTS";
+  hobbyValues = ["ギター", "魚釣り", "ゲーム", "映画"]; 
   renderHobbies();
   els.theme.value = "purple";
   els.orientation.value = "landscape";
