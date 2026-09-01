@@ -431,35 +431,82 @@ input:focus, select:focus {
   html, body {
     width: 210mm;
     height: 148mm;
-    background: white;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
-  body * { visibility: hidden !important; }
+  body {
+    overflow: visible;
+  }
 
-  .preview-stage, .preview-stage * {
+  .app-shell,
+  .app-shell * {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  .preview-stage,
+  .preview-stage *,
+  .person-card,
+  .person-card *,
+  .festival-badge,
+  .identity,
+  .name-row,
+  .preview-class,
+  .name-row h3,
+  .nickname,
+  .tags,
+  .talent-box,
+  .glow,
+  .line,
+  .card-content {
+    display: block !important;
     visibility: visible !important;
   }
 
   .preview-stage {
-    position: fixed;
-    inset: 0;
-    width: 210mm;
-    height: 148mm;
-    min-height: 0;
-    padding: 0;
-    border: 0;
-    background: white;
-    overflow: hidden;
+    position: relative !important;
+    display: block !important;
+    width: 210mm !important;
+    height: 148mm !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+    box-shadow: none !important;
   }
 
   .person-card {
-    width: 210mm;
-    height: 148mm;
-    aspect-ratio: auto;
-    box-shadow: none;
+    position: relative !important;
+    display: block !important;
+    width: 210mm !important;
+    height: 148mm !important;
+    aspect-ratio: auto !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: linear-gradient(135deg, #2a1d34 0%, #3c2436 20%, #542d37 45%, #3d2d52 100%) !important;
   }
 
-  .export-note { display: none !important; }
+  .card-content {
+    position: absolute !important;
+    inset: 0 !important;
+    padding: 5.5% 7.5% !important;
+  }
+
+  .export-note,
+  .header-actions,
+  .preview-actions,
+  .saved-area,
+  .panel-title,
+  .toast {
+    display: none !important;
+  }
 }
 
 
@@ -718,4 +765,124 @@ input:focus, select:focus {
     grid-column: 2;
   }
 
+}
+
+
+
+/* ==========================================
+   A5印刷専用設定
+   ========================================== */
+
+@media print {
+
+    /* 印刷ページそのものをA5横にする */
+    @page {
+        size: A5 landscape;
+        margin: 0;
+    }
+
+    /* HTMLとbodyをA5ぴったりにする */
+    html,
+    body {
+        width: 210mm !important;
+        height: 148mm !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        overflow: hidden !important;
+    }
+
+
+    /* 画面上のすべての要素を一旦非表示 */
+    body * {
+        visibility: hidden !important;
+    }
+
+
+    /* プロフィールカードだけ表示 */
+    #previewStage,
+    #previewStage * {
+        visibility: visible !important;
+    }
+
+
+    /* プレビューの外側 */
+    #previewStage {
+        position: fixed !important;
+
+        left: 0 !important;
+        top: 0 !important;
+
+        width: 210mm !important;
+        height: 148mm !important;
+
+        min-width: 210mm !important;
+        min-height: 148mm !important;
+
+        max-width: 210mm !important;
+        max-height: 148mm !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        overflow: hidden !important;
+
+        transform: none !important;
+    }
+
+
+    /* 実際のプロフィールカード */
+    #previewStage .person-card {
+        box-sizing: border-box !important;
+
+        position: absolute !important;
+
+        left: 0 !important;
+        top: 0 !important;
+
+        width: 210mm !important;
+        height: 148mm !important;
+
+        min-width: 210mm !important;
+        min-height: 148mm !important;
+
+        max-width: 210mm !important;
+        max-height: 148mm !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        overflow: hidden !important;
+
+        transform: none !important;
+
+        page-break-before: avoid !important;
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
+
+        break-before: avoid !important;
+        break-after: avoid !important;
+        break-inside: avoid !important;
+    }
+
+
+    /* 印刷時に余計な要素を完全に消す */
+    header,
+    nav,
+    aside,
+    .app-header,
+    .form-panel,
+    .saved-area,
+    .export-note,
+    .toast,
+    button {
+        display: none !important;
+    }
+
+
+    /* 印刷領域からはみ出したものを切る */
+    #previewStage .person-card {
+        overflow: hidden !important;
+    }
 }
