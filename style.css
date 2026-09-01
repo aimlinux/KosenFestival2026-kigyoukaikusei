@@ -434,31 +434,27 @@ input:focus, select:focus {
     margin: 0;
     padding: 0;
     background: #fff;
+    overflow: visible;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
 
-  body {
-    overflow: visible;
-  }
-
-  .app-shell,
-  .app-shell * {
+  body * {
     display: none !important;
     visibility: hidden !important;
   }
 
-  .preview-stage,
-  .preview-stage *,
-  .person-card,
-  .person-card *,
+  #previewStage,
+  #previewStage *,
+  #card,
+  #card *,
   .festival-badge,
   .identity,
   .name-row,
   .preview-class,
-  .name-row h3,
-  .nickname,
-  .tags,
+  #previewName,
+  #previewNickname,
+  #previewTags,
   .talent-box,
   .glow,
   .line,
@@ -467,7 +463,7 @@ input:focus, select:focus {
     visibility: visible !important;
   }
 
-  .preview-stage {
+  #previewStage {
     position: relative !important;
     display: block !important;
     width: 210mm !important;
@@ -481,7 +477,7 @@ input:focus, select:focus {
     box-shadow: none !important;
   }
 
-  .person-card {
+  #card {
     position: relative !important;
     display: block !important;
     width: 210mm !important;
@@ -499,13 +495,27 @@ input:focus, select:focus {
     padding: 5.5% 7.5% !important;
   }
 
-  .export-note,
+  .festival-badge {
+    margin-bottom: 10% !important;
+  }
+
+  .app-shell,
+  .workspace,
+  .panel,
+  .form-panel,
+  .preview-panel,
   .header-actions,
   .preview-actions,
   .saved-area,
+  .export-note,
+  .toast,
   .panel-title,
-  .toast {
+  .saved-head,
+  .list-toolbar,
+  .bulk-toolbar,
+  .saved-list {
     display: none !important;
+    visibility: hidden !important;
   }
 }
 
