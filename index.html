@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+  <!-- 文字コード・表示倍率・ページタイトルを設定 -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>文化祭教室用 参加者カード作成</title>
+  <!-- 画面全体のスタイルを読み込む -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- アプリ全体の表示領域 -->
   <div class="app-shell">
+    <!-- ページタイトルと新規作成・保存操作 -->
     <header class="app-header">
       <div>
         <p class="eyebrow">KOSEN FESTIVAL 2026</p>
@@ -20,7 +24,9 @@
       </div>
     </header>
 
+    <!-- 入力画面とプレビュー画面のメイン領域 -->
     <main class="workspace">
+      <!-- プロフィール情報とデザイン設定の入力パネル -->
       <section class="panel form-panel">
         <div class="panel-title">
           <div>
@@ -30,6 +36,7 @@
           <span id="status" class="status">未保存</span>
         </div>
 
+        <!-- 人物情報を入力するフォーム -->
         <form id="profileForm">
           <label>人物の名前
             <input id="name" maxlength="30" placeholder="例：小原和真" required>
@@ -49,6 +56,7 @@
             <span id="hobbyCount">0 / 6</span>
           </div>
 
+          <!-- JavaScriptで趣味の入力欄を追加・削除する領域 -->
           <div id="hobbyInputs" class="hobbies"></div>
           <button type="button" id="addHobbyBtn" class="btn small">＋ 趣味を追加</button>
 
@@ -65,6 +73,7 @@
             </div>
           </div>
 
+          <!-- カードのテーマと印刷向きを選択 -->
           <div class="two-col">
             <label>テーマ
               <select id="theme">
@@ -86,8 +95,10 @@
           </label>
         </form>
 
+  <!-- 保存済みプロフィールの管理領域 -->
   <div class="saved-area">
 
+    <!-- 一覧のタイトルとCSV出力・全削除操作 -->
     <!-- 一覧のタイトル -->
     <div class="saved-head">
       <div>
@@ -151,12 +162,14 @@
     </div>
 
 
+    <!-- 検索結果と保存済み人物を表示 -->
     <!-- 人物一覧 -->
     <div id="savedList" class="saved-list"></div>
 
   </div>
         </section>
 
+        <!-- 入力内容を反映したカードのプレビューパネル -->
         <section class="panel preview-panel">
           <div class="panel-title">
             <div>
@@ -169,12 +182,15 @@
             </div>
           </div>
 
+          <!-- カードの表示領域と印刷対象 -->
           <div id="previewStage" class="preview-stage landscape">
             <article id="card" class="person-card theme-purple">
+              <!-- カード背景の光彩とライン装飾 -->
               <div class="glow glow-one"></div>
               <div class="glow glow-two"></div>
               <div class="line"></div>
 
+              <!-- カードに表示するプロフィール情報 -->
               <div class="card-content">
                 <div class="festival-badge">KOSEN FESTIVAL 2026</div>
                 <div class="identity">
@@ -195,6 +211,7 @@
             </article>
           </div>
 
+          <!-- PNG出力とA5印刷に関する注意書き -->
           <div class="export-note">
             <span>✓</span>
             <p><strong>A5サイズ対応</strong><br>印刷時は「実際のサイズ : 100%」を選択するとカードサイズがA5になります。</p>
@@ -203,7 +220,9 @@
       </main>
     </div>
 
+  <!-- 保存結果などを一時的に表示する通知 -->
   <div id="toast" class="toast"></div>
+  <!-- アプリの動作を制御するJavaScript -->
   <script src="app.js"></script>
 </body>
 </html>
