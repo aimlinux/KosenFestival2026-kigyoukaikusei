@@ -1,5 +1,7 @@
+/* すべての要素で幅と高さに余白を含める */
 * { box-sizing: border-box; }
 
+/* アプリ全体で使用する色と影 */
 :root {
   --bg: #f7f3ee;
   --bg-2: #efe4dc;
@@ -16,6 +18,7 @@
   --shadow: rgba(73, 39, 22, .12);
 }
 
+/* ページ全体の基本設定 */
 html, body {
   margin: 0;
   min-height: 100%;
@@ -24,6 +27,7 @@ html, body {
   font-family: Inter, "Noto Sans JP", "Yu Gothic", system-ui, sans-serif;
 }
 
+/* 背景に柔らかな光とグラデーションを表示 */
 body {
   background:
     radial-gradient(circle at 12% 8%, rgba(240,179,109,.24), transparent 22rem),
@@ -31,10 +35,13 @@ body {
     linear-gradient(135deg, #f8f2ed 0%, #f7efe9 42%, #f2e8e1 100%);
 }
 
+/* フォーム部品の文字をページのフォントに統一 */
 button, input, select { font: inherit; }
 
+/* ページ全体の最大幅と余白 */
 .app-shell { max-width: 1500px; margin: 0 auto; padding: 28px; }
 
+/* ヘッダーのタイトルと操作ボタンを横並びにする */
 .app-header {
   display: flex;
   align-items: flex-end;
@@ -43,6 +50,7 @@ button, input, select { font: inherit; }
   margin-bottom: 22px;
 }
 
+/* ヘッダー上部の小さな見出し */
 .eyebrow {
   color: #b85d47;
   letter-spacing: .18em;
@@ -51,8 +59,10 @@ button, input, select { font: inherit; }
   font-weight: 800;
 }
 
+/* 見出しと段落の上余白をリセット */
 h1, h2, h3, p { margin-top: 0; }
 
+/* ページタイトル */
 h1 {
   font-size: clamp(26px, 4vw, 42px);
   margin-bottom: 8px;
@@ -60,16 +70,20 @@ h1 {
   color: #382822;
   text-shadow: 0 4px 18px rgba(170, 110, 70, .08);
 }
+/* ページタイトルの補足説明 */
 .sub { color: var(--muted); margin-bottom: 0; }
 
+/* ヘッダーとプレビューのボタン配置 */
 .header-actions, .preview-actions { display: flex; gap: 8px; }
 
+/* 入力パネルとプレビューパネルの2列レイアウト */
 .workspace {
   display: grid;
   grid-template-columns: minmax(320px, 430px) 1fr;
   gap: 18px;
 }
 
+/* 各パネル共通の背景・境界線・影 */
 .panel {
   background: linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,249,244,.9));
   border: 1px solid rgba(146, 105, 84, .12);
@@ -78,9 +92,12 @@ h1 {
   backdrop-filter: blur(8px);
 }
 
+/* 入力パネルの内側余白 */
 .form-panel { padding: 22px; }
+/* プレビューパネルの内側余白 */
 .preview-panel { padding: 22px; min-width: 0; }
 
+/* パネル見出しと右側の操作部 */
 .panel-title {
   display: flex;
   align-items: center;
@@ -89,13 +106,16 @@ h1 {
   margin-bottom: 20px;
 }
 
+/* 2つ目以降のコンパクトなパネル見出し */
 .panel-title.compact { margin-top: 20px; margin-bottom: 12px; }
 
+/* パネル内の見出し */
 .panel-title h2 {
   font-size: 19px;
   margin: 3px 0 0;
 }
 
+/* STEP表示 */
 .step {
   color: #d56d3a;
   font-size: 10px;
@@ -103,6 +123,7 @@ h1 {
   font-weight: 800;
 }
 
+/* 保存状態のバッジ */
 .status {
   font-size: 11px;
   color: #7a4b3b;
@@ -112,6 +133,7 @@ h1 {
   background: rgba(255, 153, 98, .08);
 }
 
+/* 入力項目のラベル */
 label {
   display: block;
   color: #4f332f;
@@ -120,6 +142,7 @@ label {
   font-weight: 600;
 }
 
+/* テキスト入力と選択欄 */
 input, select {
   display: block;
   width: 100%;
@@ -133,13 +156,16 @@ input, select {
   transition: .18s;
 }
 
+/* 入力欄にフォーカスしたときの強調表示 */
 input:focus, select:focus {
   border-color: rgba(255, 122, 72, .8);
   box-shadow: 0 0 0 3px rgba(255, 122, 72, .12);
 }
 
+/* 2項目を横並びにするフォーム行 */
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
+/* 趣味入力欄の見出し */
 .hobby-head {
   display: flex;
   justify-content: space-between;
@@ -147,11 +173,14 @@ input:focus, select:focus {
   margin-top: 3px;
 }
 
+/* セクション名と入力個数 */
 .section-label { margin-bottom: 8px; }
 #hobbyCount { font-size: 11px; color: var(--muted); }
 
+/* 趣味入力欄の一覧 */
 .hobbies { display: grid; gap: 8px; }
 
+/* 1件分の趣味入力と削除ボタン */
 .hobby-row {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -159,8 +188,10 @@ input:focus, select:focus {
   align-items: end;
 }
 
+/* 趣味行では入力欄上部の余白をなくす */
 .hobby-row input { margin-top: 0; }
 
+/* 趣味を削除するボタン */
 .remove-hobby {
   height: 40px;
   width: 40px;
@@ -171,9 +202,11 @@ input:focus, select:focus {
   cursor: pointer;
 }
 
+/* 特技入力欄と区切り線 */
 .talent-label { margin-top: 14px; }
 .divider { height: 1px; background: var(--line); margin: 22px 0; }
 
+/* 共通ボタン */
 .btn {
   border: 1px solid rgba(132, 102, 89, .1);
   background: rgba(255,255,255,.58);
@@ -185,26 +218,33 @@ input:focus, select:focus {
   box-shadow: 0 8px 18px rgba(98, 52, 35, .06);
 }
 
+/* ボタンのホバー状態 */
 .btn:hover {
   transform: translateY(-1px);
   background: rgba(255,255,255,.72);
   box-shadow: 0 12px 24px rgba(98, 52, 35, .1);
 }
+/* 主要操作ボタン */
 .btn.primary {
   background: linear-gradient(135deg, #ff8b69, #f76d98);
   border-color: rgba(255, 127, 86, .2);
   color: white;
 }
+/* 控えめなボタン */
 .btn.ghost { background: rgba(255,255,255,.38); }
+/* 小サイズのボタン */
 .btn.small { padding: 8px 11px; font-size: 12px; }
 
+/* 保存済み人物一覧の見出し */
 .saved-area { margin-top: 25px; }
 .saved-head { display: flex; justify-content: space-between; align-items: center; }
 .saved-head h3 { font-size: 13px; margin: 0; }
 .text-btn { background: transparent; color: #8993aa; border: 0; cursor: pointer; font-size: 11px; }
 
+/* 保存済み人物の一覧 */
 .saved-list { display: grid; gap: 7px; margin-top: 10px; max-height: 220px; overflow: auto; }
 
+/* 保存済み人物1件分 */
 .saved-item {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -217,13 +257,16 @@ input:focus, select:focus {
   box-shadow: 0 5px 14px rgba(158, 86, 44, .06);
 }
 
+/* 保存済み人物のクリック領域 */
 .saved-item-main { cursor: pointer; min-width: 0; }
 .saved-item-name { font-weight: 700; font-size: 12px; color: #442b26; }
 .saved-item-meta { color: #7a5e54; font-size: 10px; margin-top: 2px; }
 .delete-btn { border: 0; background: transparent; color: #7f5d5a; cursor: pointer; }
 
+/* 一覧が空のときの表示 */
 .empty { color: #68738a; font-size: 11px; padding: 10px 0; }
 
+/* カードプレビューを配置する領域 */
 .preview-stage {
   display: grid;
   place-items: center;
@@ -240,6 +283,7 @@ input:focus, select:focus {
   overflow: auto;
 }
 
+/* プロフィールカード本体 */
 .person-card {
   position: relative;
   width: min(100%, 900px);
@@ -252,6 +296,7 @@ input:focus, select:focus {
   container-type: inline-size;
 }
 
+/* カード上部の装飾レイヤー */
 .person-card::before {
   content: "";
   position: absolute;
@@ -262,6 +307,7 @@ input:focus, select:focus {
   pointer-events: none;
 }
 
+/* カード下部の光彩 */
 .person-card::after {
   content: "";
   position: absolute;
@@ -274,20 +320,24 @@ input:focus, select:focus {
   opacity: .8;
 }
 
+/* 青テーマの装飾 */
 .theme-blue::before {
   background:
     linear-gradient(135deg, rgba(61, 118, 255, .94), rgba(82, 201, 255, .28) 22%, transparent 44%),
     linear-gradient(16deg, transparent 0 52%, rgba(97, 232, 255, .32) 62%, transparent 80%);
 }
+/* 緑テーマの装飾 */
 .theme-green::before {
   background:
     linear-gradient(135deg, rgba(24, 137, 112, .92), rgba(125, 210, 101, .24) 22%, transparent 44%),
     linear-gradient(16deg, transparent 0 52%, rgba(87, 255, 197, .26) 62%, transparent 80%);
   pointer-events: none;
 }
+/* カード内の光彩パーツ */
 .glow-one { width: 32%; height: 50%; left: -10%; top: 55%; background: rgba(0,191,255,.7); }
 .glow-two { width: 38%; height: 40%; left: 4%; top: -14%; background: rgba(115,35,255,.65); }
 
+/* カード上の細いライン */
 .line {
   position: absolute;
   left: 16%;
@@ -297,6 +347,7 @@ input:focus, select:focus {
   background: rgba(255,255,255,.2);
 }
 
+/* カード内のコンテンツ領域 */
 .card-content {
   position: absolute;
   inset: 0;
@@ -304,6 +355,7 @@ input:focus, select:focus {
   z-index: 2;
 }
 
+/* 文化祭名のバッジ */
 .festival-badge {
   display: inline-block;
   margin-bottom: 10%;
@@ -318,7 +370,9 @@ input:focus, select:focus {
   font-weight: 700;
 }
 
+/* 名前とクラスの情報 */
 .identity { position: relative; }
+/* クラス名と人物名の下線付き行 */
 .name-row {
   display: flex;
   align-items: baseline;
@@ -328,6 +382,7 @@ input:focus, select:focus {
   padding-bottom: .3%;
 }
 
+/* プレビュー上のクラス名 */
 .preview-class {
   font-size: clamp(15px, 5.2cqw, 65px);
   line-height: 1;
@@ -335,6 +390,7 @@ input:focus, select:focus {
   color: #fff7d4;
 }
 
+/* プレビュー上の人物名 */
 .name-row h3 {
   font-size: clamp(25px, 8.8cqw, 110px);
   font-weight: 300;
@@ -346,6 +402,7 @@ input:focus, select:focus {
   text-overflow: ellipsis;
 }
 
+/* ニックネーム */
 .nickname {
   margin-top: 3.1%;
   font-size: clamp(12px, 3.5cqw, 42px);
@@ -353,6 +410,7 @@ input:focus, select:focus {
   color: #ffe6b0;
 }
 
+/* 趣味から生成されるハッシュタグ */
 .tags {
   margin-top: 8.5%;
   color: #fff5ba;
@@ -363,6 +421,7 @@ input:focus, select:focus {
   text-shadow: 0 0 18px rgba(255, 214, 122, .42);
 }
 
+/* 隠れた特技の表示 */
 .talent-box {
   position: absolute;
   left: 7.5%;
@@ -377,6 +436,7 @@ input:focus, select:focus {
   font-size: clamp(12px, 2.55cqw, 32px);
 }
 
+/* 出力・印刷に関する注意書き */
 .export-note {
   display: flex;
   gap: 10px;
@@ -389,6 +449,7 @@ input:focus, select:focus {
 .export-note p { margin: 0; }
 .export-note strong { color: #c8d0df; }
 
+/* 保存などの結果を知らせる通知 */
 .toast {
   position: fixed;
   left: 50%;
@@ -406,13 +467,16 @@ input:focus, select:focus {
   z-index: 50;
   font-size: 12px;
 }
+/* 通知を表示状態に切り替える */
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+/* タブレット向けの1列レイアウト */
 @media (max-width: 1000px) {
   .workspace { grid-template-columns: 1fr; }
   .preview-stage { min-height: 450px; }
 }
 
+/* スマートフォン向けの余白と縦並び */
 @media (max-width: 560px) {
   .app-shell { padding: 15px; }
   .app-header { align-items: flex-start; flex-direction: column; }
@@ -421,12 +485,13 @@ input:focus, select:focus {
   .preview-actions { flex-wrap: wrap; }
 }
 
-/* A5 print */
+/* 画面表示時のA5印刷サイズ */
 @page {
   size: A5 landscape;
   margin: 0;
 }
 
+/* 印刷時はプロフィールカードだけを表示 */
 @media print {
   html, body {
     width: 210mm;
