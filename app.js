@@ -58,10 +58,13 @@ function showToast(message) {
 }
 
 function normalizeText(value) {
+  // 入力欄の前後にある余分な空白を取り除き、保存する文字列を統一する。
   return value.trim();
 }
 
 function renderHobbies(values = hobbyValues) {
+  // 趣味の入力欄は固定で用意せず、配列の内容から必要な数だけ作り直す。
+  // 最大6件に制限することで、カードのレイアウトが崩れないようにする。
   hobbyValues = values.slice(0, 6);
   els.hobbyInputs.innerHTML = "";
 
@@ -74,6 +77,7 @@ function renderHobbies(values = hobbyValues) {
     input.placeholder = `趣味 ${index + 1}`;
     input.value = value;
     input.addEventListener("input", () => {
+      // 入力欄の番号に対応する配列の値を更新し、プレビューもすぐに反映する。
       hobbyValues[index] = input.value;
       updatePreview();
     });
@@ -84,6 +88,7 @@ function renderHobbies(values = hobbyValues) {
     remove.textContent = "×";
     remove.title = "削除";
     remove.addEventListener("click", () => {
+      // 配列から対象の趣味を削除して、入力欄を現在の配列内容で再生成する。
       hobbyValues.splice(index, 1);
       renderHobbies();
       updatePreview();
@@ -99,6 +104,8 @@ function renderHobbies(values = hobbyValues) {
 
 // フォームの入力内容をプロフィールオブジェクトに変換する
 function getProfileFromForm() {
+  // フォームと一時保存中の趣味を、保存・表示で扱いやすい1つのオブジェクトにまとめる。
+  // 空の趣味は保存せず、未入力の名前などにはプレビュー用の初期値を設定する。
   const hobbies = hobbyValues.map(normalizeText).filter(Boolean);
   return {
     id: currentId || crypto.randomUUID(),
@@ -116,12 +123,16 @@ function getProfileFromForm() {
 
 // タグが未入力なら趣味から自動生成する
 function autoTags(profile) {
+  // タグが入力済みならそのまま使う。未入力の場合だけ、趣味名からタグを自動生成する。
+  // 空白を削除して、1つの趣味が複数のタグに分かれないようにする。
   if (profile.tags) return profile.tags;
   return profile.hobbies.map(h => "#" + h.replace(/\s+/g, "")).join("　");
 }
 
 // 入力内容をリアルタイムでカードプレビューへ反映する
 function updatePreview() {
+  // 入力中のフォームを読み取り、カードの文字・テーマ・向きを一度に更新する。
+  // 保存前でも呼び出されるため、編集状態か新規作成状態かもここで表示する。
   const profile = getProfileFromForm();
 
   els.previewClass.textContent = profile.className;
@@ -141,6 +152,8 @@ function updatePreview() {
 
 // フォームを初期状態に戻して新規作成モードへ切り替える
 function resetForm() {
+  // 新規作成ボタンや全削除後に呼び出し、編集中のIDとフォームを初期状態に戻す。
+  // サンプル値を入れて、画面を開いた直後でもカードの見た目を確認できるようにする。
   currentId = null;
   els.form.reset();
   els.name.value = "小原和真";
@@ -157,6 +170,8 @@ function resetForm() {
 
 // 保存済みプロフィールをローカルストレージから読み込む
 function loadProfiles() {
+  // localStorageには文字列として保存されているため、JSONをプロフィール配列に戻す。
+  // 壊れたデータが残っていても画面全体が停止しないよう、読み込み失敗時は空配列を返す。
   try {
     return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
   } catch {
@@ -166,10 +181,13 @@ function loadProfiles() {
 
 // プロフィール一覧をローカルストレージに保存する
 function saveProfiles(profiles) {
+  // プロフィール配列をJSON文字列に変換して、ブラウザ内だけに保存する。
+  // サーバーや外部サービスには送信しない。
   localStorage.setItem(STORAGE_KEY, JSON.stringify(profiles));
 }
 
 function saveCurrent() {
+  // 名前が空の場合は保存せず、入力欄へフォーカスして修正箇所を知らせる。
   if (!normalizeText(els.name.value)) {
     els.name.focus();
     showToast("名前を入力してください");
@@ -178,6 +196,7 @@ function saveCurrent() {
 
   const profile = getProfileFromForm();
   const profiles = loadProfiles();
+  // currentIdが一致すれば既存プロフィールの更新、一致しなければ新しいプロフィールとして先頭に追加する。
   const index = profiles.findIndex(p => p.id === profile.id);
 
   if (index >= 0) profiles[index] = profile;
@@ -191,6 +210,8 @@ function saveCurrent() {
 }
 
 function loadProfile(id) {
+  // 一覧で選ばれたIDのプロフィールを探し、各項目をフォームへ戻して編集状態にする。
+  // 対応するデータが見つからない場合は、画面を変更せずに終了する。
   const profile = loadProfiles().find(p => p.id === id);
   if (!profile) return;
 
@@ -208,6 +229,7 @@ function loadProfile(id) {
 }
 
 function deleteProfile(id) {
+  // 指定IDだけを除いた配列を保存し、現在編集中のデータならフォームも新規状態に戻す。
   const profiles = loadProfiles().filter(p => p.id !== id);
   saveProfiles(profiles);
   if (currentId === id) resetForm();
@@ -216,7 +238,8 @@ function deleteProfile(id) {
 }
 
 function renderSavedList() {
-
+  // 保存データを検索・並び替えした結果から、プロフィール一覧のDOMを毎回作り直す。
+  // 再描画前に選択済みIDを取得することで、検索や並び替え後も選択状態を維持する。
   let profiles = loadProfiles();
 
   // =========================
@@ -230,7 +253,7 @@ function renderSavedList() {
   if (search) {
 
     profiles = profiles.filter(profile => {
-
+      // 名前だけでなく、クラス・ニックネーム・趣味・特技・タグをまとめて検索対象にする。
       const text = [
         profile.name,
         profile.className,
@@ -254,7 +277,7 @@ function renderSavedList() {
   const sortType = els.profileSort.value;
 
   profiles.sort((a, b) => {
-
+    // 選択された並び順に応じて比較値を返す。日本語名・クラス名は日本語ロケールで比較する。
     if (sortType === "name-asc") {
 
       return a.name.localeCompare(
@@ -507,7 +530,7 @@ function renderSavedList() {
 }
 
 function getSelectedIds() {
-
+  // 現在一覧に表示されているチェック済みチェックボックスから、プロフィールIDだけを取り出す。
   return Array.from(
     document.querySelectorAll(
       ".profile-check:checked"
@@ -519,7 +542,7 @@ function getSelectedIds() {
 }
 
 function updateSelectionUI() {
-
+  // 選択人数、複数削除ボタン、全選択チェックボックスを現在の選択状態に合わせて更新する。
   const selectedIds =
     getSelectedIds();
 
@@ -555,7 +578,8 @@ function updateSelectionUI() {
 }
 
 function duplicateProfile(id) {
-
+  // 元データを残したまま、新しいIDを付けた複製を作成する。
+  // 趣味配列もコピーして、複製後の編集が元プロフィールに影響しないようにする。
   const profiles =
     loadProfiles();
 
@@ -606,7 +630,8 @@ function duplicateProfile(id) {
 }
 
 function bulkDeleteSelected() {
-
+  // 一覧でチェックされたプロフィールをまとめて削除する。
+  // 誤操作を防ぐため、削除前に確認ダイアログを表示する。
   const ids =
     getSelectedIds();
 
@@ -656,7 +681,7 @@ function bulkDeleteSelected() {
 }
 
 function exportProfilesCsv() {
-
+  // 保存済みプロフィールを表形式のCSVに変換し、ブラウザからダウンロードする。
   const profiles =
     loadProfiles();
 
@@ -673,6 +698,7 @@ function exportProfilesCsv() {
 
   // CSVで使えない文字を処理
   const escapeCsv =
+    // カンマ・改行・ダブルクォートを含む値も1セルとして扱えるよう、全値を引用符で囲む。
     value =>
       `"${String(value ?? "")
         .replace(/"/g, '""')}"`;
@@ -769,6 +795,8 @@ function exportProfilesCsv() {
 }
 
 function wrapText(ctx, text, maxWidth, fontSize) {
+  // CanvasにはHTMLのような自動改行がないため、1文字ずつ幅を測って行を分割する。
+  // 日本語の長いタグでもキャンバスの端からはみ出さないようにするための処理。
   const chars = [...text];
   const lines = [];
   let line = "";
@@ -788,6 +816,8 @@ function wrapText(ctx, text, maxWidth, fontSize) {
 
 // プロフィールをA5相当のキャンバスに描画してPNG出力用の画像を生成する
 function drawCardToCanvas(profile, width = 2480, height = 1748) {
+  // 画面のプレビューとは別に、印刷品質に近い大きさのCanvasへカードを描画する。
+  // portraitの場合は幅と高さを入れ替え、縦向きの画像として出力する。
   const canvas = document.createElement("canvas");
   const portrait = profile.orientation === "portrait";
   canvas.width = portrait ? height : width;
@@ -893,6 +923,7 @@ function drawCardToCanvas(profile, width = 2480, height = 1748) {
 }
 
 function downloadPng() {
+  // 現在のフォーム内容をCanvas画像に変換し、プロフィール名をファイル名にして保存する。
   const profile = getProfileFromForm();
   const canvas = drawCardToCanvas(profile);
   canvas.toBlob(blob => {
@@ -908,6 +939,7 @@ function downloadPng() {
 }
 
 function printCard() {
+  // 印刷用CSSが適用されるブラウザの印刷画面を開く。
   window.print();
 }
 
