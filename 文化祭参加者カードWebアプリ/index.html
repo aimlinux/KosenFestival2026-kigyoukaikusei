@@ -1,0 +1,18 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>文化祭参加者カード</title><link rel="stylesheet" href="style.css"></head><body>
+<header class="header no-print"><div><small>KOSEN FESTIVAL 2026</small><h1>文化祭参加者カード</h1><p>入力 → プレビュー → 保存 → PNG出力 → A5印刷まで、この画面で完結します。</p></div><div><button id="newBtn">新規</button><button class="primary" id="saveBtn">保存</button></div></header>
+<main class="layout">
+<aside class="panel editor no-print"><b>STEP 1</b><h2>プロフィール入力</h2>
+<label>人物の名前<input id="name" placeholder="例：小原和真"></label>
+<div class="grid"><label>クラス<input id="className" placeholder="例：5J"></label><label>ニックネーム<input id="nickname" placeholder="例：かずま"></label></div>
+<div class="row"><label>趣味（1〜6個）</label><span id="hobbyCount">0 / 6</span></div><div id="hobbyInputs"></div><button id="addHobby">＋ 趣味を追加</button>
+<label>隠れた特技<textarea id="secretSkill" placeholder="例：指パッチン"></textarea></label>
+<hr><b>STEP 2</b><h2>デザイン設定</h2>
+<div class="grid"><label>テーマ<select id="theme"><option value="purple">Purple Night</option><option value="blue">Ocean Blue</option><option value="sunset">Sunset</option><option value="forest">Forest</option></select></label><label>向き<select id="orientation"><option value="landscape">A5 横</option><option value="portrait">A5 縦</option></select></label></div>
+<label>ハッシュタグ<input id="hashtags" placeholder="#ゲーム #魚釣り"></label>
+<hr><div class="row"><div><b>人物一覧管理</b><div id="peopleCount">0人</div></div><button class="danger" id="deleteAllBtn">全削除</button></div>
+<div class="grid search"><input id="search" placeholder="🔎 名前・クラス・趣味で検索"><select id="sort"><option value="updated">更新順</option><option value="name">名前順</option></select></div>
+<div class="selection"><span id="selectedCount">0人選択中</span><span><button id="selectAllBtn">全選択</button><button class="danger" id="deleteSelectedBtn">選択削除</button></span></div><div id="peopleList"></div>
+</aside>
+<section class="panel preview"><div class="row no-print"><div><b>STEP 3</b><h2>完成イメージ</h2></div><div><button id="pngBtn">PNG出力</button><button class="primary" id="printBtn">A5印刷</button></div></div>
+<div class="stage"><article id="printCard" class="card theme-purple landscape"><div class="top"><span>KOSEN FESTIVAL 2026</span><i></i></div><div class="title"><div>CLASS <strong id="previewClass">クラス</strong></div><h3 id="previewName">名前未入力</h3><u id="previewNickname">nickname</u></div><div class="info"><strong id="previewHobbies">#趣味</strong><small>隠れた特技：</small><b id="previewSecret">特技を入力</b></div></article></div><p class="note no-print">✓ A5サイズ対応　印刷時はカードだけを実際のサイズで出力します。</p></section>
+</main><div id="toast"></div><script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><script src="app.js"></script></body></html>
