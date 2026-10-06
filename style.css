@@ -3,19 +3,22 @@
 
 /* アプリ全体で使用する色と影 */
 :root {
-  --bg: #f7f3ee;
-  --bg-2: #efe4dc;
-  --panel: rgba(255,255,255,.76);
-  --panel-2: rgba(255,251,247,.95);
-  --text: #2d221f;
-  --muted: #7d6b62;
-  --line: rgba(118, 90, 75, .12);
-  --accent: #d96a42;
-  --accent-2: #f0b36d;
-  --accent-3: #b35eea;
-  --rose: #f96a8b;
-  --gold: #f7d28c;
-  --shadow: rgba(73, 39, 22, .12);
+  --bg: #f6efe7;
+  --bg-2: #eadcc6;
+  --panel: rgba(255,249,244,.82);
+  --panel-2: rgba(255,251,247,.96);
+  --text: #2f201b;
+  --muted: #7b665c;
+  --line: rgba(120, 86, 61, .12);
+  --accent: #8a5a3b;
+  --accent-2: #d9a981;
+  --accent-3: #c97344;
+  --rose: #d77756;
+  --gold: #f1cf9c;
+  --shadow: rgba(82, 46, 27, .12);
+  --coffee: #4d2f26;
+  --latte: #f8f1e8;
+  --bean: #2b1f1c;
 }
 
 /* ページ全体の基本設定 */
@@ -30,9 +33,9 @@ html, body {
 /* 背景に柔らかな光とグラデーションを表示 */
 body {
   background:
-    radial-gradient(circle at 12% 8%, rgba(240,179,109,.24), transparent 22rem),
-    radial-gradient(circle at 85% 18%, rgba(179,94,234,.12), transparent 20rem),
-    linear-gradient(135deg, #f8f2ed 0%, #f7efe9 42%, #f2e8e1 100%);
+    radial-gradient(circle at 12% 8%, rgba(216, 165, 121, .26), transparent 22rem),
+    radial-gradient(circle at 84% 18%, rgba(143, 95, 61, .12), transparent 18rem),
+    linear-gradient(135deg, #f9f2ea 0%, #f3e5d5 40%, #f0e2d6 100%);
 }
 
 /* フォーム部品の文字をページのフォントに統一 */
@@ -85,10 +88,10 @@ h1 {
 
 /* 各パネル共通の背景・境界線・影 */
 .panel {
-  background: linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,249,244,.9));
-  border: 1px solid rgba(146, 105, 84, .12);
+  background: linear-gradient(180deg, rgba(255,252,249,.88), rgba(247,237,227,.94));
+  border: 1px solid rgba(126, 85, 61, .12);
   border-radius: 26px;
-  box-shadow: 0 24px 60px rgba(79, 45, 31, .08);
+  box-shadow: 0 24px 60px rgba(79, 45, 31, .08), inset 0 1px 0 rgba(255,255,255,.6);
   backdrop-filter: blur(8px);
 }
 
@@ -117,7 +120,7 @@ h1 {
 
 /* STEP表示 */
 .step {
-  color: #d56d3a;
+  color: #9e6141;
   font-size: 10px;
   letter-spacing: .14em;
   font-weight: 800;
@@ -126,11 +129,11 @@ h1 {
 /* 保存状態のバッジ */
 .status {
   font-size: 11px;
-  color: #7a4b3b;
+  color: #6d4837;
   padding: 6px 9px;
-  border: 1px solid rgba(196, 98, 52, .2);
+  border: 1px solid rgba(141, 92, 62, .2);
   border-radius: 999px;
-  background: rgba(255, 153, 98, .08);
+  background: rgba(197, 127, 77, .1);
 }
 
 /* 入力項目のラベル */
@@ -226,9 +229,10 @@ input:focus, select:focus {
 }
 /* 主要操作ボタン */
 .btn.primary {
-  background: linear-gradient(135deg, #ff8b69, #f76d98);
-  border-color: rgba(255, 127, 86, .2);
+  background: linear-gradient(135deg, #7d4a34 0%, #b9714b 45%, #e0a666 100%);
+  border-color: rgba(125, 74, 52, .2);
   color: white;
+  box-shadow: 0 12px 24px rgba(98, 72, 52, .2);
 }
 /* 控えめなボタン */
 .btn.ghost { background: rgba(255,255,255,.38); }
@@ -252,7 +256,7 @@ input:focus, select:focus {
   align-items: center;
   padding: 10px;
   border: 1px solid rgba(146, 92, 72, .12);
-  background: linear-gradient(180deg, #fffdfb 0%, #fff3ea 100%);
+  background: linear-gradient(180deg, #fffdfb 0%, #f8ebdf 100%);
   border-radius: 10px;
   box-shadow: 0 5px 14px rgba(158, 86, 44, .06);
 }
@@ -275,9 +279,9 @@ input:focus, select:focus {
   border: 1px solid rgba(150, 107, 87, .12);
   border-radius: 22px;
   background:
-    linear-gradient(45deg, rgba(245, 186, 135, .08) 25%, transparent 25%, transparent 75%, rgba(245, 186, 135, .08) 75%),
-    linear-gradient(45deg, rgba(245, 186, 135, .08) 25%, transparent 25%, transparent 75%, rgba(245, 186, 135, .08) 75%),
-    linear-gradient(180deg, rgba(255,255,255,.45), rgba(255,244,236,.86));
+    linear-gradient(45deg, rgba(201, 155, 110, .09) 25%, transparent 25%, transparent 75%, rgba(201, 155, 110, .09) 75%),
+    linear-gradient(45deg, rgba(201, 155, 110, .09) 25%, transparent 25%, transparent 75%, rgba(201, 155, 110, .09) 75%),
+    linear-gradient(180deg, rgba(255,255,255,.5), rgba(245,236,227,.9));
   background-position: 0 0, 12px 12px;
   background-size: 24px 24px;
   overflow: auto;
@@ -290,7 +294,7 @@ input:focus, select:focus {
   aspect-ratio: 210 / 148;
   overflow: hidden;
   color: #fff;
-  background: linear-gradient(135deg, #2a1d34 0%, #3c2436 20%, #542d37 45%, #3d2d52 100%);
+  background: linear-gradient(135deg, #2c1d1a 0%, #4b2d24 20%, #6d4337 45%, #2e211c 100%);
   box-shadow: 0 30px 80px rgba(60, 26, 18, .18), inset 0 0 0 1px rgba(255,255,255,.08);
   border-radius: 18px;
   container-type: inline-size;
@@ -321,21 +325,27 @@ input:focus, select:focus {
 }
 
 /* 青テーマの装飾 */
+.theme-cafe::before {
+  background:
+    linear-gradient(135deg, rgba(216, 134, 84, .96) 0%, rgba(255, 214, 166, .48) 18%, transparent 42%),
+    linear-gradient(16deg, transparent 0 52%, rgba(255, 216, 146, .34) 62%, transparent 80%);
+}
+
 .theme-blue::before {
   background:
-    linear-gradient(135deg, rgba(61, 118, 255, .94), rgba(82, 201, 255, .28) 22%, transparent 44%),
-    linear-gradient(16deg, transparent 0 52%, rgba(97, 232, 255, .32) 62%, transparent 80%);
+    linear-gradient(135deg, rgba(98, 133, 117, .92), rgba(181, 205, 180, .28) 22%, transparent 44%),
+    linear-gradient(16deg, transparent 0 52%, rgba(194, 236, 209, .28) 62%, transparent 80%);
 }
 /* 緑テーマの装飾 */
 .theme-green::before {
   background:
-    linear-gradient(135deg, rgba(24, 137, 112, .92), rgba(125, 210, 101, .24) 22%, transparent 44%),
-    linear-gradient(16deg, transparent 0 52%, rgba(87, 255, 197, .26) 62%, transparent 80%);
+    linear-gradient(135deg, rgba(72, 104, 92, .9), rgba(170, 196, 137, .25) 22%, transparent 44%),
+    linear-gradient(16deg, transparent 0 52%, rgba(177, 240, 199, .22) 62%, transparent 80%);
   pointer-events: none;
 }
 /* カード内の光彩パーツ */
-.glow-one { width: 32%; height: 50%; left: -10%; top: 55%; background: rgba(0,191,255,.7); }
-.glow-two { width: 38%; height: 40%; left: 4%; top: -14%; background: rgba(115,35,255,.65); }
+.glow-one { width: 32%; height: 50%; left: -10%; top: 55%; background: rgba(244, 196, 116, .64); }
+.glow-two { width: 38%; height: 40%; left: 4%; top: -14%; background: rgba(100, 62, 42, .7); }
 
 /* カード上の細いライン */
 .line {
