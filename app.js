@@ -163,7 +163,7 @@ function resetForm() {
   els.tags.value = "#ギター #ワンオク #魚釣り #恋バナ #BTS";
   hobbyValues = ["ギター", "魚釣り", "ゲーム", "映画"]; 
   renderHobbies();
-  els.theme.value = "cafe";
+  els.theme.value = "blue";
   els.orientation.value = "landscape";
   updatePreview();
 }
@@ -221,7 +221,7 @@ function loadProfile(id) {
   els.nickname.value = profile.nickname || "";
   els.talent.value = profile.talent || "";
   els.tags.value = profile.tags || "";
-  els.theme.value = profile.theme || "cafe";
+  els.theme.value = profile.theme || "blue";
   els.orientation.value = profile.orientation || "landscape";
   renderHobbies(profile.hobbies || []);
   updatePreview();
@@ -1031,4 +1031,3 @@ els.selectAllProfiles.addEventListener(
 renderHobbies([]);
 renderSavedList();
 updatePreview();
-
