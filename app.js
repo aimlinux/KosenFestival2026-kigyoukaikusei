@@ -141,7 +141,7 @@ function updatePreview() {
   els.previewTags.textContent = autoTags(profile) || "#趣味";
   els.previewTalent.textContent = profile.talent || "特技を入力";
 
-  els.card.classList.remove("theme-cafe", "theme-purple", "theme-blue", "theme-green");
+  els.card.classList.remove("theme-purple", "theme-blue", "theme-green");
   els.card.classList.add(`theme-${profile.theme}`);
 
   els.previewStage.classList.toggle("portrait", profile.orientation === "portrait");
@@ -221,7 +221,7 @@ function loadProfile(id) {
   els.nickname.value = profile.nickname || "";
   els.talent.value = profile.talent || "";
   els.tags.value = profile.tags || "";
-  els.theme.value = profile.theme || "blue";
+  els.theme.value = profile.theme === "cafe" ? "blue" : profile.theme || "blue";
   els.orientation.value = profile.orientation || "landscape";
   renderHobbies(profile.hobbies || []);
   updatePreview();
