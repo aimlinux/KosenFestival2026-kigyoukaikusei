@@ -47,8 +47,16 @@ const els = {
 let currentId = null;
 let hobbyValues = [];
 let hobbyRanking = [];
-let hobbyRankingError = "";
+let hobbyRankingIsSample = false;
+let hobbyRankingMessage = "ランキングを読み込み中です";
 let hobbyRankingQueue = Promise.resolve();
+const SAMPLE_HOBBY_RANKING = [
+  { name: "ゲーム", count: 12 },
+  { name: "音楽", count: 10 },
+  { name: "映画・アニメ", count: 8 },
+  { name: "読書", count: 6 },
+  { name: "スポーツ", count: 5 }
+];
 
 // ローカルストレージの保存先キー
 const STORAGE_KEY = "person-card-studio-profiles-v1";
@@ -108,18 +116,10 @@ function renderHobbies(values = hobbyValues) {
 
 function renderHobbyRanking() {
   els.hobbyRankingList.replaceChildren();
-  if (hobbyRankingError) {
-    const error = document.createElement("li");
-    error.className = "hobby-ranking-empty";
-    error.textContent = hobbyRankingError;
-    els.hobbyRankingList.appendChild(error);
-    return;
-  }
-
   if (hobbyRanking.length === 0) {
     const empty = document.createElement("li");
     empty.className = "hobby-ranking-empty";
-    empty.textContent = "ランキングを読み込み中、またはまだ登録がありません";
+    empty.textContent = hobbyRankingMessage;
     els.hobbyRankingList.appendChild(empty);
     return;
   }
@@ -148,6 +148,13 @@ function renderHobbyRanking() {
     item.appendChild(button);
     els.hobbyRankingList.appendChild(item);
   });
+
+  if (hobbyRankingIsSample) {
+    const note = document.createElement("li");
+    note.className = "hobby-ranking-empty";
+    note.textContent = hobbyRankingMessage;
+    els.hobbyRankingList.appendChild(note);
+  }
 }
 
 function queueHobbyRankingRequest(request) {
@@ -168,12 +175,20 @@ function queueHobbyRankingRequest(request) {
       Number.isInteger(entry.count) &&
       entry.count > 0
     );
-    hobbyRankingError = "";
+    hobbyRankingIsSample = false;
+    hobbyRankingMessage = hobbyRanking.length
+      ? "サーバーに保存されたランキングです"
+      : "サーバーに趣味の登録はまだありません";
     renderHobbyRanking();
   }).catch(error => {
-    hobbyRankingError = "サーバーに接続できません。サーバーを起動して再読み込みしてください。";
+    const wasUsingSample = hobbyRankingIsSample;
+    hobbyRanking = SAMPLE_HOBBY_RANKING;
+    hobbyRankingIsSample = true;
+    hobbyRankingMessage = "サーバー未接続時の仮データです。実際のランキングはサーバー起動後に表示されます。";
     renderHobbyRanking();
-    console.error("趣味ランキングの同期に失敗しました:", error);
+    if (!wasUsingSample) {
+      console.warn("趣味ランキングサーバーに接続できないため、仮データを表示します:", error);
+    }
   });
 
   return hobbyRankingQueue;
