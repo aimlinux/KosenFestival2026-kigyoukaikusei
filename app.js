@@ -46,6 +46,9 @@ const els = {
 // 現在編集中のプロフィールIDと趣味入力の一時状態
 let currentId = null;
 let hobbyValues = [];
+let hobbyRanking = [];
+let hobbyRankingError = "";
+let hobbyRankingQueue = Promise.resolve();
 
 // ローカルストレージの保存先キー
 const STORAGE_KEY = "person-card-studio-profiles-v1";
@@ -104,44 +107,33 @@ function renderHobbies(values = hobbyValues) {
 }
 
 function renderHobbyRanking() {
-  const counts = new Map();
-
-  loadProfiles().forEach(profile => {
-    const seenInProfile = new Set();
-    (Array.isArray(profile.hobbies) ? profile.hobbies : []).forEach(hobby => {
-      if (typeof hobby !== "string") return;
-      const name = normalizeText(hobby);
-      if (!name) return;
-
-      const key = name.toLocaleLowerCase("ja");
-      if (seenInProfile.has(key)) return;
-      seenInProfile.add(key);
-
-      const entry = counts.get(key);
-      if (entry) entry.count += 1;
-      else counts.set(key, { name, count: 1 });
-    });
-  });
-
-  const ranking = [...counts.values()]
-    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, "ja"))
-    .slice(0, 5);
-
   els.hobbyRankingList.replaceChildren();
-  if (ranking.length === 0) {
+  if (hobbyRankingError) {
+    const error = document.createElement("li");
+    error.className = "hobby-ranking-empty";
+    error.textContent = hobbyRankingError;
+    els.hobbyRankingList.appendChild(error);
+    return;
+  }
+
+  if (hobbyRanking.length === 0) {
     const empty = document.createElement("li");
     empty.className = "hobby-ranking-empty";
-    empty.textContent = "プロフィールを保存するとランキングが表示されます";
+    empty.textContent = "ランキングを読み込み中、またはまだ登録がありません";
     els.hobbyRankingList.appendChild(empty);
     return;
   }
 
-  ranking.forEach(({ name, count }) => {
+  hobbyRanking.forEach(({ name, count }, index) => {
     const item = document.createElement("li");
     const button = document.createElement("button");
     button.type = "button";
     button.className = "hobby-ranking-item";
     button.setAttribute("aria-label", `${name}、${count}人`);
+
+    const position = document.createElement("span");
+    position.className = "hobby-ranking-position";
+    position.textContent = `${index + 1}`;
 
     const hobbyName = document.createElement("span");
     hobbyName.className = "hobby-ranking-name";
@@ -151,11 +143,57 @@ function renderHobbyRanking() {
     popularity.className = "hobby-ranking-count";
     popularity.textContent = `${count}人`;
 
-    button.append(hobbyName, popularity);
+    button.append(position, hobbyName, popularity);
     button.addEventListener("click", () => addRankedHobby(name));
     item.appendChild(button);
     els.hobbyRankingList.appendChild(item);
   });
+}
+
+function queueHobbyRankingRequest(request) {
+  hobbyRankingQueue = hobbyRankingQueue.then(async () => {
+    const response = await request();
+    if (!response.ok) {
+      throw new Error(`ランキングサーバーがHTTP ${response.status}を返しました`);
+    }
+
+    const result = await response.json();
+    if (!Array.isArray(result.ranking)) {
+      throw new Error("ランキングサーバーから不正な応答が返されました");
+    }
+
+    hobbyRanking = result.ranking.filter(entry =>
+      entry &&
+      typeof entry.name === "string" &&
+      Number.isInteger(entry.count) &&
+      entry.count > 0
+    );
+    hobbyRankingError = "";
+    renderHobbyRanking();
+  }).catch(error => {
+    hobbyRankingError = "サーバーに接続できません。サーバーを起動して再読み込みしてください。";
+    renderHobbyRanking();
+    console.error("趣味ランキングの同期に失敗しました:", error);
+  });
+
+  return hobbyRankingQueue;
+}
+
+function syncHobbyRanking() {
+  const profiles = loadProfiles().map(profile => ({
+    id: profile.id,
+    hobbies: Array.isArray(profile.hobbies) ? profile.hobbies : []
+  }));
+
+  return queueHobbyRankingRequest(() => fetch("/api/hobbies/sync", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ profiles })
+  }));
+}
+
+function refreshHobbyRanking() {
+  return queueHobbyRankingRequest(() => fetch("/api/hobbies/ranking"));
 }
 
 function addRankedHobby(name) {
@@ -263,9 +301,9 @@ function loadProfiles() {
 
 // プロフィール一覧をローカルストレージに保存する
 function saveProfiles(profiles) {
-  // プロフィール配列をJSON文字列に変換して、ブラウザ内だけに保存する。
-  // サーバーや外部サービスには送信しない。
+  // プロフィール本体はブラウザー内に保存し、趣味だけをランキング用サーバーへ同期する。
   localStorage.setItem(STORAGE_KEY, JSON.stringify(profiles));
+  syncHobbyRanking();
 }
 
 function saveCurrent() {
@@ -323,7 +361,6 @@ function renderSavedList() {
   // 保存データを検索・並び替えした結果から、プロフィール一覧のDOMを毎回作り直す。
   // 再描画前に選択済みIDを取得することで、検索や並び替え後も選択状態を維持する。
   let profiles = loadProfiles();
-  renderHobbyRanking();
 
   // =========================
   // 検索
@@ -1046,7 +1083,7 @@ els.pngBtn.addEventListener("click", downloadPng);
 els.clearAllBtn.addEventListener("click", () => {
   if (!loadProfiles().length) return;
   if (!confirm("保存済みプロフィールをすべて削除しますか？")) return;
-  localStorage.removeItem(STORAGE_KEY);
+  saveProfiles([]);
   resetForm();
   renderSavedList();
   showToast("すべて削除しました");
@@ -1114,3 +1151,6 @@ els.selectAllProfiles.addEventListener(
 renderHobbies([]);
 renderSavedList();
 updatePreview();
+renderHobbyRanking();
+syncHobbyRanking();
+setInterval(refreshHobbyRanking, 30000);

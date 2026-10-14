@@ -244,6 +244,19 @@ input:focus, select:focus {
   background: #fff;
 }
 
+.hobby-ranking-position {
+  display: grid;
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  place-items: center;
+  border-radius: 50%;
+  background: #e8f1e5;
+  color: #426849;
+  font-size: 10px;
+  font-weight: 700;
+}
+
 .hobby-ranking-name { font-size: 12px; }
 .hobby-ranking-count { color: #52775a; font-size: 10px; white-space: nowrap; }
 .hobby-ranking-empty { color: var(--muted); font-size: 11px; }
