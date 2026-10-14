@@ -18,6 +18,7 @@ const els = {
   hobbyInputs: $("hobbyInputs"),
   hobbyCount: $("hobbyCount"),
   addHobbyBtn: $("addHobbyBtn"),
+  hobbyRankingList: $("hobbyRankingList"),
   saveBtn: $("saveBtn"),
   newBtn: $("newBtn"),
   printBtn: $("printBtn"),
@@ -100,6 +101,87 @@ function renderHobbies(values = hobbyValues) {
 
   els.hobbyCount.textContent = `${hobbyValues.length} / 6`;
   els.addHobbyBtn.disabled = hobbyValues.length >= 6;
+}
+
+function renderHobbyRanking() {
+  const counts = new Map();
+
+  loadProfiles().forEach(profile => {
+    const seenInProfile = new Set();
+    (Array.isArray(profile.hobbies) ? profile.hobbies : []).forEach(hobby => {
+      if (typeof hobby !== "string") return;
+      const name = normalizeText(hobby);
+      if (!name) return;
+
+      const key = name.toLocaleLowerCase("ja");
+      if (seenInProfile.has(key)) return;
+      seenInProfile.add(key);
+
+      const entry = counts.get(key);
+      if (entry) entry.count += 1;
+      else counts.set(key, { name, count: 1 });
+    });
+  });
+
+  const ranking = [...counts.values()]
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, "ja"))
+    .slice(0, 5);
+
+  els.hobbyRankingList.replaceChildren();
+  if (ranking.length === 0) {
+    const empty = document.createElement("li");
+    empty.className = "hobby-ranking-empty";
+    empty.textContent = "プロフィールを保存するとランキングが表示されます";
+    els.hobbyRankingList.appendChild(empty);
+    return;
+  }
+
+  ranking.forEach(({ name, count }) => {
+    const item = document.createElement("li");
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "hobby-ranking-item";
+    button.setAttribute("aria-label", `${name}、${count}人`);
+
+    const hobbyName = document.createElement("span");
+    hobbyName.className = "hobby-ranking-name";
+    hobbyName.textContent = name;
+
+    const popularity = document.createElement("span");
+    popularity.className = "hobby-ranking-count";
+    popularity.textContent = `${count}人`;
+
+    button.append(hobbyName, popularity);
+    button.addEventListener("click", () => addRankedHobby(name));
+    item.appendChild(button);
+    els.hobbyRankingList.appendChild(item);
+  });
+}
+
+function addRankedHobby(name) {
+  const existingIndex = hobbyValues.findIndex(
+    value => normalizeText(value).toLocaleLowerCase("ja") === name.toLocaleLowerCase("ja")
+  );
+  if (existingIndex >= 0) {
+    els.hobbyInputs.querySelectorAll("input")[existingIndex]?.focus();
+    return;
+  }
+
+  let targetIndex = hobbyValues.findIndex(value => !normalizeText(value));
+  if (targetIndex < 0) {
+    if (hobbyValues.length >= 6) {
+      showToast("趣味は最大6個までです");
+      return;
+    }
+    hobbyValues.push(name);
+    targetIndex = hobbyValues.length - 1;
+  } else {
+    hobbyValues[targetIndex] = name;
+  }
+
+  renderHobbies();
+  updatePreview();
+  els.hobbyInputs.querySelectorAll("input")[targetIndex]?.focus();
 }
 
 // フォームの入力内容をプロフィールオブジェクトに変換する
@@ -241,6 +323,7 @@ function renderSavedList() {
   // 保存データを検索・並び替えした結果から、プロフィール一覧のDOMを毎回作り直す。
   // 再描画前に選択済みIDを取得することで、検索や並び替え後も選択状態を維持する。
   let profiles = loadProfiles();
+  renderHobbyRanking();
 
   // =========================
   // 検索

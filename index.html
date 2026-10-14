@@ -60,6 +60,14 @@
           <div id="hobbyInputs" class="hobbies"></div>
           <button type="button" id="addHobbyBtn" class="btn small">＋ 趣味を追加</button>
 
+          <section class="hobby-ranking" aria-labelledby="hobbyRankingTitle">
+            <div class="hobby-ranking-heading">
+              <h3 id="hobbyRankingTitle">よく入力される趣味 TOP 5</h3>
+              <p>このブラウザの保存データから集計・クリックで追加</p>
+            </div>
+            <ol id="hobbyRankingList" class="hobby-ranking-list"></ol>
+          </section>
+
           <label class="talent-label">隠れた特技
             <input id="talent" maxlength="40" placeholder="例：指パッチン">
           </label>
