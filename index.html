@@ -9,29 +9,29 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- アプリ全体の表示領域 -->
+  <!-- アプリ全体の表示領域 --> 
   <div class="app-shell">
     <!-- ページタイトルと新規作成・保存操作 -->
     <header class="app-header">
       <div>
         <p class="eyebrow">KOSEN FESTIVAL 2026</p>
-        <h1>文化祭参加者カード</h1>
-        <p class="sub">教室内の端末で誰でも簡単に、入力 → プレビュー → 保存 → PNG出力 → A5印刷までこの画面で完結します。</p>
+        <h1>文化祭参加者カード</h1> 
+        <p class="sub">教室内の端末で誰でも簡単に、入力 →  プレビュー → 保存 → PNG出力 → A5印刷までこの画面で完結します。</p>
       </div>
       <div class="header-actions">
         <button id="newBtn" class="btn ghost">新規</button>
         <button id="saveBtn" class="btn primary">保存</button>
       </div>
     </header>
-
-    <!-- 入力画面とプレビュー画面のメイン領域 -->
+   
+    <!-- 入力画面とプレビュー画面のメイン領域 --> 
     <main class="workspace">
       <!-- プロフィール情報とデザイン設定の入力パネル -->
-      <section class="panel form-panel">
+      <section class="panel form-panel"> 
         <div class="panel-title">
           <div>
             <span class="step">STEP 1</span>
-            <h2>プロフィール入力</h2>
+            <h2>プロフィール入力</h2> 
           </div>
           <span id="status" class="status">未保存</span>
         </div>
@@ -60,6 +60,14 @@
           <div id="hobbyInputs" class="hobbies"></div>
           <button type="button" id="addHobbyBtn" class="btn small">＋ 趣味を追加</button>
 
+          <section class="hobby-ranking" aria-labelledby="hobbyRankingTitle">
+            <div class="hobby-ranking-heading">
+              <h3 id="hobbyRankingTitle">よく入力される趣味 TOP 5</h3>
+              <p>ランキングをクリックすると趣味欄に追加できます</p>
+            </div>
+            <ol id="hobbyRankingList" class="hobby-ranking-list"></ol>
+          </section>
+
           <label class="talent-label">隠れた特技
             <input id="talent" maxlength="40" placeholder="例：指パッチン">
           </label>
@@ -77,8 +85,8 @@
           <div class="two-col">
             <label>テーマ
               <select id="theme">
+                <option value="blue">Green Tea</option>
                 <option value="purple">Purple Night</option>
-                <option value="blue">Blue Wave</option>
                 <option value="green">Aurora Green</option>
               </select>
             </label>
@@ -184,7 +192,7 @@
 
           <!-- カードの表示領域と印刷対象 -->
           <div id="previewStage" class="preview-stage landscape">
-            <article id="card" class="person-card theme-purple">
+            <article id="card" class="person-card theme-blue">
               <!-- カード背景の光彩とライン装飾 -->
               <div class="glow glow-one"></div>
               <div class="glow glow-two"></div>
@@ -201,7 +209,7 @@
                   <div id="previewNickname" class="nickname">jr（ジュニア）</div>
                 </div>
 
-                <div id="previewTags" class="tags">#ギター　#ワンオク　#魚釣り　#恋バナ　#BTS</div>
+                <div id="previewTags" class="tags">#ギター　#　#魚釣り　#恋バナ　#BTS</div>
 
                 <div class="talent-box">
                   <p>隠れた特技：</p>
@@ -218,6 +226,28 @@
           </div>
         </section>
       </main>
+
+      <footer class="sponsors" aria-labelledby="sponsorsTitle">
+        <div class="sponsors-heading">
+          <div>
+            <p class="eyebrow">SUPPORTERS</p>
+            <h2 id="sponsorsTitle">協賛企業</h2>
+          </div>
+          <p class="sponsors-note">企業名・リンク先は仮のサンプルです。</p>
+        </div>
+        <ul class="sponsor-list">
+          <li><a href="https://example.com/" target="_blank" rel="noopener noreferrer">ミライノート株式会社 <span>仮掲載</span></a></li>
+          <li><a href="https://example.com/" target="_blank" rel="noopener noreferrer">こもれび珈琲 <span>仮掲載</span></a></li>
+          <li><a href="https://example.com/" target="_blank" rel="noopener noreferrer">青空システムズ <span>仮掲載</span></a></li>
+          <li><a href="https://example.com/" target="_blank" rel="noopener noreferrer">北星エナジー株式会社 <span>仮掲載</span></a></li>
+          <li><a href="https://example.com/" target="_blank" rel="noopener noreferrer">さくら印刷工房 <span>仮掲載</span></a></li>
+          <li><a href="https://example.com/" target="_blank" rel="noopener noreferrer">つばさ物流サービス <span>仮掲載</span></a></li>
+          <li><a href="https://example.com/" target="_blank" rel="noopener noreferrer">まちかど不動産 <span>仮掲載</span></a></li>
+          <li><a href="https://example.com/" target="_blank" rel="noopener noreferrer">ほしの文具店 <span>仮掲載</span></a></li>
+          <li><a href="https://example.com/" target="_blank" rel="noopener noreferrer">山吹ものづくり工房 <span>仮掲載</span></a></li>
+          <li><a href="https://example.com/" target="_blank" rel="noopener noreferrer">未来教育ラボ <span>仮掲載</span></a></li>
+        </ul>
+      </footer>
     </div>
 
   <!-- 保存結果などを一時的に表示する通知 -->

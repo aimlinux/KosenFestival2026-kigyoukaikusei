@@ -9,4 +9,4 @@ if not errorlevel 1 (
 )
 
 start "" http://localhost:8000
-%PYTHON_CMD% -m http.server 8000
+%PYTHON_CMD% server.py
