@@ -949,8 +949,17 @@ function wrapText(ctx, text, maxWidth, fontSize) {
   return lines;
 }
 
+function loadCardBackground() {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error("バー背景画像を読み込めませんでした"));
+    image.src = new URL("assets/bar-interior.png", document.baseURI).href;
+  });
+}
+
 // プロフィールをA5相当のキャンバスに描画してPNG出力用の画像を生成する
-function drawCardToCanvas(profile, width = 2480, height = 1748) {
+async function drawCardToCanvas(profile, width = 2480, height = 1748) {
   // 画面のプレビューとは別に、印刷品質に近い大きさのCanvasへカードを描画する。
   // portraitの場合は幅と高さを入れ替え、縦向きの画像として出力する。
   const canvas = document.createElement("canvas");
@@ -961,24 +970,33 @@ function drawCardToCanvas(profile, width = 2480, height = 1748) {
   const ctx = canvas.getContext("2d");
   const w = canvas.width, h = canvas.height;
 
-  // Background
-  ctx.fillStyle = "#080a10";
-  ctx.fillRect(0, 0, w, h);
-
-  const purple = profile.theme === "purple";
   const blue = profile.theme === "blue";
   const green = profile.theme === "green";
 
+  const background = await loadCardBackground();
+  const backgroundScale = Math.max(w / background.naturalWidth, h / background.naturalHeight);
+  const backgroundWidth = background.naturalWidth * backgroundScale;
+  const backgroundHeight = background.naturalHeight * backgroundScale;
+  ctx.drawImage(
+    background,
+    (w - backgroundWidth) / 2,
+    (h - backgroundHeight) / 2,
+    backgroundWidth,
+    backgroundHeight
+  );
+  ctx.fillStyle = "rgba(8, 12, 13, .5)";
+  ctx.fillRect(0, 0, w, h);
+
   const grad = ctx.createLinearGradient(0, 0, w * .5, h * .65);
   if (green) {
-    grad.addColorStop(0, "rgba(23,173,111,.95)");
-    grad.addColorStop(.3, "rgba(23,173,111,.20)");
+    grad.addColorStop(0, "rgba(23,123,82,.3)");
+    grad.addColorStop(.3, "rgba(23,123,82,.08)");
   } else if (blue) {
-    grad.addColorStop(0, "rgba(0,91,255,.95)");
-    grad.addColorStop(.3, "rgba(0,91,255,.20)");
+    grad.addColorStop(0, "rgba(57,112,94,.3)");
+    grad.addColorStop(.3, "rgba(57,112,94,.08)");
   } else {
-    grad.addColorStop(0, "rgba(112,45,255,.96)");
-    grad.addColorStop(.3, "rgba(112,45,255,.22)");
+    grad.addColorStop(0, "rgba(112,45,150,.3)");
+    grad.addColorStop(.3, "rgba(112,45,150,.08)");
   }
   grad.addColorStop(1, "rgba(0,0,0,0)");
   ctx.fillStyle = grad;
@@ -986,8 +1004,8 @@ function drawCardToCanvas(profile, width = 2480, height = 1748) {
 
   // Glow
   const glow = ctx.createRadialGradient(w*.08, h*.95, 10, w*.08, h*.95, w*.48);
-  glow.addColorStop(0, "rgba(0,205,255,.65)");
-  glow.addColorStop(1, "rgba(0,205,255,0)");
+  glow.addColorStop(0, "rgba(224,171,93,.28)");
+  glow.addColorStop(1, "rgba(224,171,93,0)");
   ctx.fillStyle = glow;
   ctx.fillRect(0, h*.45, w*.7, h*.7);
 
@@ -1057,11 +1075,17 @@ function drawCardToCanvas(profile, width = 2480, height = 1748) {
   return canvas;
 }
 
-function downloadPng() {
+async function downloadPng() {
   // 現在のフォーム内容をCanvas画像に変換し、プロフィール名をファイル名にして保存する。
-  const profile = getProfileFromForm();
-  const canvas = drawCardToCanvas(profile);
-  canvas.toBlob(blob => {
+  try {
+    const profile = getProfileFromForm();
+    const canvas = await drawCardToCanvas(profile);
+    const blob = await new Promise((resolve, reject) => {
+      canvas.toBlob(result => {
+        if (result) resolve(result);
+        else reject(new Error("PNG画像を生成できませんでした"));
+      }, "image/png");
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     const safe = (profile.name || "person-card").replace(/[\\/:*?"<>|]/g, "_");
@@ -1070,7 +1094,10 @@ function downloadPng() {
     a.click();
     URL.revokeObjectURL(url);
     showToast("PNGを書き出しました");
-  }, "image/png");
+  } catch (error) {
+    console.error("PNGの書き出しに失敗しました:", error);
+    showToast("背景画像を含むPNGを書き出せませんでした");
+  }
 }
 
 function printCard() {

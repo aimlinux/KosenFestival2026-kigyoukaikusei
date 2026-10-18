@@ -361,7 +361,7 @@ input:focus, select:focus {
   aspect-ratio: 210 / 148;
   overflow: hidden;
   color: #fff;
-  background: linear-gradient(135deg, #2c1d1a 0%, #4b2d24 20%, #6d4337 45%, #2e211c 100%);
+  background: #171713 url("assets/bar-interior.png") center 52% / cover no-repeat;
   box-shadow: 0 30px 80px rgba(60, 26, 18, .18), inset 0 0 0 1px rgba(255,255,255,.08);
   border-radius: 18px;
   container-type: inline-size;
@@ -373,9 +373,8 @@ input:focus, select:focus {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(72, 45, 30, .06), rgba(58, 35, 26, .22)),
-    linear-gradient(135deg, rgba(138, 86, 58, .75) 0%, rgba(245, 215, 170, .26) 20%, transparent 42%),
-    linear-gradient(16deg, transparent 0 54%, rgba(255, 216, 146, .26) 62%, transparent 80%);
+    linear-gradient(90deg, rgba(10, 14, 13, .58), rgba(10, 14, 13, .3)),
+    linear-gradient(135deg, rgba(138, 86, 58, .16), transparent 52%);
   pointer-events: none;
 }
 
@@ -394,15 +393,21 @@ input:focus, select:focus {
 
 .theme-blue::before {
   background:
-    linear-gradient(135deg, rgba(98, 133, 117, .92), rgba(181, 205, 180, .28) 22%, transparent 44%),
-    linear-gradient(16deg, transparent 0 52%, rgba(194, 236, 209, .28) 62%, transparent 80%);
+    linear-gradient(90deg, rgba(10, 20, 18, .64), rgba(10, 20, 18, .32)),
+    linear-gradient(135deg, rgba(78, 129, 111, .28), transparent 60%);
 }
+
+.theme-purple::before {
+  background:
+    linear-gradient(90deg, rgba(16, 12, 24, .66), rgba(16, 12, 24, .34)),
+    linear-gradient(135deg, rgba(112, 45, 150, .3), transparent 60%);
+}
+
 /* 緑テーマの装飾 */
 .theme-green::before {
   background:
-    linear-gradient(135deg, rgba(72, 104, 92, .9), rgba(170, 196, 137, .25) 22%, transparent 44%),
-    linear-gradient(16deg, transparent 0 52%, rgba(177, 240, 199, .22) 62%, transparent 80%);
-  pointer-events: none;
+    linear-gradient(90deg, rgba(10, 20, 17, .64), rgba(10, 20, 17, .32)),
+    linear-gradient(135deg, rgba(72, 124, 78, .3), transparent 60%);
 }
 /* カード内の光彩パーツ */
 .glow-one { width: 32%; height: 50%; left: -10%; top: 55%; background: rgba(244, 196, 116, .64); }
