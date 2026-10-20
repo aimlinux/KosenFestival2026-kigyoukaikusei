@@ -486,6 +486,17 @@ input:focus, select:focus {
   color: #ffe6b0;
 }
 
+/* 趣味の表示 */
+.hobby-display {
+  margin-top: 7%;
+  color: #fff5ba;
+  font-size: clamp(11px, 2.7cqw, 34px);
+  line-height: 1.45;
+  max-width: 90%;
+  overflow-wrap: anywhere;
+  text-shadow: 0 0 18px rgba(255, 214, 122, .42);
+}
+
 /* 隠れた特技の表示 */
 .talent-box {
   position: absolute;
@@ -634,6 +645,7 @@ input:focus, select:focus {
   .preview-class,
   #previewName,
   #previewNickname,
+  #previewHobbies,
   .talent-box,
   .glow,
   .line,

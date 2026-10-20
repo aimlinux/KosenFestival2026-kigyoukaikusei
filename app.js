@@ -32,6 +32,7 @@ const els = {
   previewClass: $("previewClass"),
   previewName: $("previewName"),
   previewNickname: $("previewNickname"),
+  previewHobbies: $("previewHobbies"),
   previewTalent: $("previewTalent"),
   toast: $("toast"),
   profileCount: $("profileCount"),
@@ -265,6 +266,7 @@ function updatePreview() {
   els.previewClass.textContent = profile.className;
   els.previewName.textContent = profile.name;
   els.previewNickname.textContent = profile.nickname ? profile.nickname : "nickname";
+  els.previewHobbies.textContent = `趣味：${profile.hobbies.join("・") || "未入力"}`;
   els.previewTalent.textContent = profile.talent || "特技を入力";
   els.printScaleValue.value = `${profile.printScale}%`;
   els.printScaleValue.textContent = `${profile.printScale}%`;
@@ -1015,6 +1017,16 @@ async function drawCardToCanvas(profile, width = 2480, height = 1748) {
   ctx.lineTo(left + nickWidth, top + nameSize*1.26);
   ctx.stroke();
 
+  // Hobbies
+  const hobbyText = (profile.hobbies || []).join("・") || "未入力";
+  const hobbySize = 30 * scale;
+  ctx.fillStyle = "#fff5ba";
+  ctx.font = `400 ${hobbySize}px "Yu Gothic", "Noto Sans JP", sans-serif`;
+  const hobbyLines = wrapText(ctx, `趣味：${hobbyText}`, w*.86);
+  hobbyLines.slice(0, 3).forEach((line, index) => {
+    ctx.fillText(line, left, h*.51 + index*hobbySize*1.4);
+  });
+
   // Talent
   ctx.fillStyle = "#fff";
   const talentSize = 27 * scale;
@@ -1024,6 +1036,23 @@ async function drawCardToCanvas(profile, width = 2480, height = 1748) {
   ctx.fillText(profile.talent || "特技を入力", left*.72, h*.84);
 
   return canvas;
+}
+
+function wrapText(ctx, text, maxWidth) {
+  const lines = [];
+  let line = "";
+
+  for (const char of text) {
+    const nextLine = line + char;
+    if (line && ctx.measureText(nextLine).width > maxWidth) {
+      lines.push(line);
+      line = char;
+    } else {
+      line = nextLine;
+    }
+  }
+  if (line) lines.push(line);
+  return lines;
 }
 
 async function downloadPng() {
