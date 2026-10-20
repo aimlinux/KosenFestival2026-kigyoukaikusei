@@ -949,19 +949,19 @@ async function drawCardToCanvas(profile, width = 2480, height = 1748) {
     backgroundWidth,
     backgroundHeight
   );
-  ctx.fillStyle = "rgba(8, 12, 13, .5)";
+  ctx.fillStyle = "rgba(7, 5, 4, .68)";
   ctx.fillRect(0, 0, w, h);
 
   const grad = ctx.createLinearGradient(0, 0, w * .5, h * .65);
   if (green) {
-    grad.addColorStop(0, "rgba(23,123,82,.3)");
-    grad.addColorStop(.3, "rgba(23,123,82,.08)");
+    grad.addColorStop(0, "rgba(54,75,48,.2)");
+    grad.addColorStop(.3, "rgba(24,20,14,.12)");
   } else if (blue) {
-    grad.addColorStop(0, "rgba(57,112,94,.3)");
-    grad.addColorStop(.3, "rgba(57,112,94,.08)");
+    grad.addColorStop(0, "rgba(67,77,59,.2)");
+    grad.addColorStop(.3, "rgba(24,20,14,.12)");
   } else {
-    grad.addColorStop(0, "rgba(112,45,150,.3)");
-    grad.addColorStop(.3, "rgba(112,45,150,.08)");
+    grad.addColorStop(0, "rgba(83,49,58,.2)");
+    grad.addColorStop(.3, "rgba(24,20,14,.12)");
   }
   grad.addColorStop(1, "rgba(0,0,0,0)");
   ctx.fillStyle = grad;

@@ -361,7 +361,7 @@ input:focus, select:focus {
   aspect-ratio: 210 / 148;
   overflow: hidden;
   color: #fff;
-  background: #171713 url("assets/bar-interior.png") center 52% / cover no-repeat;
+  background: #100b08 url("assets/bar-interior.png") center 52% / cover no-repeat;
   box-shadow: 0 30px 80px rgba(60, 26, 18, .18), inset 0 0 0 1px rgba(255,255,255,.08);
   border-radius: 18px;
   container-type: inline-size;
@@ -373,8 +373,8 @@ input:focus, select:focus {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(10, 14, 13, .58), rgba(10, 14, 13, .3)),
-    linear-gradient(135deg, rgba(138, 86, 58, .16), transparent 52%);
+    linear-gradient(90deg, rgba(8, 6, 5, .78), rgba(12, 8, 6, .54)),
+    linear-gradient(135deg, rgba(91, 53, 30, .24), transparent 58%);
   pointer-events: none;
 }
 
@@ -393,21 +393,21 @@ input:focus, select:focus {
 
 .theme-blue::before {
   background:
-    linear-gradient(90deg, rgba(10, 20, 18, .64), rgba(10, 20, 18, .32)),
-    linear-gradient(135deg, rgba(78, 129, 111, .28), transparent 60%);
+    linear-gradient(90deg, rgba(7, 8, 7, .8), rgba(10, 9, 7, .56)),
+    linear-gradient(135deg, rgba(76, 91, 70, .2), transparent 60%);
 }
 
 .theme-purple::before {
   background:
-    linear-gradient(90deg, rgba(16, 12, 24, .66), rgba(16, 12, 24, .34)),
-    linear-gradient(135deg, rgba(112, 45, 150, .3), transparent 60%);
+    linear-gradient(90deg, rgba(9, 7, 9, .8), rgba(12, 8, 10, .56)),
+    linear-gradient(135deg, rgba(91, 57, 67, .2), transparent 60%);
 }
 
 /* 緑テーマの装飾 */
 .theme-green::before {
   background:
-    linear-gradient(90deg, rgba(10, 20, 17, .64), rgba(10, 20, 17, .32)),
-    linear-gradient(135deg, rgba(72, 124, 78, .3), transparent 60%);
+    linear-gradient(90deg, rgba(7, 9, 7, .8), rgba(9, 11, 8, .56)),
+    linear-gradient(135deg, rgba(57, 80, 52, .2), transparent 60%);
 }
 /* カード内の光彩パーツ */
 .glow-one { width: 32%; height: 50%; left: -10%; top: 55%; background: rgba(244, 196, 116, .64); }
