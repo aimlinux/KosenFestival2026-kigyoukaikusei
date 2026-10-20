@@ -986,19 +986,32 @@ async function drawCardToCanvas(profile, width = 2480, height = 1748) {
   const top = h*.055;
 
   // Name
-  const classSize = 62 * scale;
-  const nameSize = 105 * scale;
+  const maxNameWidth = w * .85;
+  let classSize = 88 * scale;
+  let nameSize = 150 * scale;
+  let className = profile.className || "CLASS";
+  let name = profile.name || "名前未入力";
+  let nameLineWidth;
+  while (true) {
+    ctx.font = `300 ${classSize}px "Yu Gothic", "Noto Sans JP", sans-serif`;
+    const classWidth = ctx.measureText(className).width;
+    ctx.font = `300 ${nameSize}px "Yu Gothic", "Noto Sans JP", sans-serif`;
+    nameLineWidth = classWidth + w * .018 + ctx.measureText(name).width;
+    if (nameLineWidth <= maxNameWidth || nameSize <= 24 * scale) break;
+    classSize *= .92;
+    nameSize *= .92;
+  }
+
   ctx.fillStyle = "#fff";
   ctx.textBaseline = "alphabetic";
   ctx.font = `300 ${classSize}px "Yu Gothic", "Noto Sans JP", sans-serif`;
-  ctx.fillText(profile.className || "CLASS", left, top + nameSize*.65);
-
-  const classWidth = ctx.measureText(profile.className || "CLASS").width;
+  ctx.fillText(className, left, top + nameSize*.68);
+  const classWidth = ctx.measureText(className).width;
   ctx.font = `300 ${nameSize}px "Yu Gothic", "Noto Sans JP", sans-serif`;
   const nameX = left + classWidth + w*.018;
-  ctx.fillText(profile.name || "名前未入力", nameX, top + nameSize*.68);
+  ctx.fillText(name, nameX, top + nameSize*.68);
 
-  const underlineY = top + nameSize*.84;
+  const underlineY = top + nameSize*.82;
   ctx.lineWidth = Math.max(3, 5 * scale);
   ctx.beginPath();
   ctx.moveTo(left, underlineY);
@@ -1006,9 +1019,9 @@ async function drawCardToCanvas(profile, width = 2480, height = 1748) {
   ctx.stroke();
 
   // Nickname
-  const nickSize = 40 * scale;
-  ctx.font = `400 ${nickSize}px "Yu Gothic", "Noto Sans JP", sans-serif`;
   const nickname = profile.nickname || "nickname";
+  const nickSize = fitFontSize(ctx, nickname, 58 * scale, maxNameWidth, 28 * scale);
+  ctx.font = `400 ${nickSize}px "Yu Gothic", "Noto Sans JP", sans-serif`;
   ctx.fillText(nickname, left, top + nameSize*1.22);
   const nickWidth = ctx.measureText(nickname).width;
   ctx.lineWidth = Math.max(2, 2 * scale);
@@ -1019,21 +1032,27 @@ async function drawCardToCanvas(profile, width = 2480, height = 1748) {
 
   // Hobbies
   const hobbyText = (profile.hobbies || []).join("・") || "未入力";
-  const hobbySize = 30 * scale;
-  ctx.fillStyle = "#fff5ba";
-  ctx.font = `400 ${hobbySize}px "Yu Gothic", "Noto Sans JP", sans-serif`;
-  const hobbyLines = wrapText(ctx, `趣味：${hobbyText}`, w*.86);
-  hobbyLines.slice(0, 3).forEach((line, index) => {
-    ctx.fillText(line, left, h*.51 + index*hobbySize*1.4);
+  let hobbySize = 52 * scale;
+  let hobbyLines;
+  ctx.fillStyle = "#fff";
+  do {
+    ctx.font = `400 ${hobbySize}px "Yu Gothic", "Noto Sans JP", sans-serif`;
+    hobbyLines = wrapText(ctx, `趣味：${hobbyText}`, maxNameWidth);
+    if (hobbyLines.length <= 6) break;
+    hobbySize *= Math.max(.72, 6 / hobbyLines.length * .95);
+  } while (hobbySize > 24 * scale);
+  const hobbyLineHeight = Math.min(hobbySize * 1.25, h * .34 / hobbyLines.length);
+  const hobbyStartY = h * .57 - (hobbyLines.length - 1) * hobbyLineHeight / 2;
+  hobbyLines.forEach((line, index) => {
+    ctx.fillText(line, left, hobbyStartY + index * hobbyLineHeight);
   });
 
   // Talent
   ctx.fillStyle = "#fff";
-  const talentSize = 27 * scale;
+  const talentText = `隠れた特技：${profile.talent || "特技を入力"}`;
+  const talentSize = fitFontSize(ctx, talentText, 64 * scale, maxNameWidth, 28 * scale);
   ctx.font = `400 ${talentSize}px "Yu Gothic", "Noto Sans JP", sans-serif`;
-  ctx.fillText("隠れた特技：", left*.72, h*.735);
-  ctx.font = `400 ${32 * scale}px "Yu Gothic", "Noto Sans JP", sans-serif`;
-  ctx.fillText(profile.talent || "特技を入力", left*.72, h*.84);
+  ctx.fillText(talentText, left, h*.88);
 
   return canvas;
 }
@@ -1053,6 +1072,14 @@ function wrapText(ctx, text, maxWidth) {
   }
   if (line) lines.push(line);
   return lines;
+}
+
+function fitFontSize(ctx, text, startingSize, maxWidth, minimumSize) {
+  ctx.font = `400 ${startingSize}px "Yu Gothic", "Noto Sans JP", sans-serif`;
+  const textWidth = ctx.measureText(text).width;
+  const fontSize = Math.max(minimumSize, startingSize * Math.min(1, maxWidth / textWidth));
+  ctx.font = `400 ${fontSize}px "Yu Gothic", "Noto Sans JP", sans-serif`;
+  return fontSize;
 }
 
 async function downloadPng() {
