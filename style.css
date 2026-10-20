@@ -505,11 +505,11 @@ input:focus, select:focus {
 }
 .talent-box p {
   margin: 0 0 3.2%;
-  font-size: clamp(10px, 2.15cqw, 27px);
+  font-size: clamp(10px, 1.95cqw, 24px);
 }
 .talent-box strong {
   font-weight: 400;
-  font-size: clamp(12px, 2.55cqw, 32px);
+  font-size: clamp(12px, 2.35cqw, 29px);
 }
 
 /* 出力・印刷に関する注意書き */
