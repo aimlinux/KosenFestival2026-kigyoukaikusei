@@ -58,6 +58,7 @@ const SAMPLE_HOBBY_RANKING = [
   { name: "読書", count: 6 },
   { name: "スポーツ", count: 5 }
 ];
+const MAX_HOBBIES = 12;
 
 // ローカルストレージの保存先キー
 const STORAGE_KEY = "person-card-studio-profiles-v1";
@@ -77,8 +78,8 @@ function normalizeText(value) {
 
 function renderHobbies(values = hobbyValues) {
   // 趣味の入力欄は固定で用意せず、配列の内容から必要な数だけ作り直す。
-  // 最大6件に制限することで、カードのレイアウトが崩れないようにする。
-  hobbyValues = values.slice(0, 6);
+  // 表示・保存・出力で扱える数を12件に揃える。
+  hobbyValues = values.slice(0, MAX_HOBBIES);
   els.hobbyInputs.innerHTML = "";
 
   hobbyValues.forEach((value, index) => {
@@ -111,8 +112,8 @@ function renderHobbies(values = hobbyValues) {
     els.hobbyInputs.appendChild(row);
   });
 
-  els.hobbyCount.textContent = `${hobbyValues.length} / 6`;
-  els.addHobbyBtn.disabled = hobbyValues.length >= 6;
+  els.hobbyCount.textContent = `${hobbyValues.length} / ${MAX_HOBBIES}`;
+  els.addHobbyBtn.disabled = hobbyValues.length >= MAX_HOBBIES;
 }
 
 function renderHobbyRanking() {
@@ -223,8 +224,8 @@ function addRankedHobby(name) {
 
   let targetIndex = hobbyValues.findIndex(value => !normalizeText(value));
   if (targetIndex < 0) {
-    if (hobbyValues.length >= 6) {
-      showToast("趣味は最大6個までです");
+    if (hobbyValues.length >= MAX_HOBBIES) {
+      showToast(`趣味は最大${MAX_HOBBIES}個までです`);
       return;
     }
     hobbyValues.push(name);
@@ -838,6 +839,12 @@ function exportProfilesCsv() {
       "趣味4",
       "趣味5",
       "趣味6",
+      "趣味7",
+      "趣味8",
+      "趣味9",
+      "趣味10",
+      "趣味11",
+      "趣味12",
       "隠れた特技"
     ]
   ];
@@ -855,12 +862,7 @@ function exportProfilesCsv() {
 
       profile.nickname,
 
-      hobbies[0] || "",
-      hobbies[1] || "",
-      hobbies[2] || "",
-      hobbies[3] || "",
-      hobbies[4] || "",
-      hobbies[5] || "",
+      ...Array.from({ length: MAX_HOBBIES }, (_, index) => hobbies[index] || ""),
 
       profile.talent
 
@@ -1113,7 +1115,7 @@ function printCard() {
 }
 
 els.addHobbyBtn.addEventListener("click", () => {
-  if (hobbyValues.length >= 6) return;
+  if (hobbyValues.length >= MAX_HOBBIES) return;
   hobbyValues.push("");
   renderHobbies();
   updatePreview();
