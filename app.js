@@ -12,9 +12,10 @@ const els = {
   className: $("className"),
   nickname: $("nickname"),
   talent: $("talent"),
-  tags: $("tags"),
   theme: $("theme"),
   orientation: $("orientation"),
+  printScale: $("printScale"),
+  printScaleValue: $("printScaleValue"),
   hobbyInputs: $("hobbyInputs"),
   hobbyCount: $("hobbyCount"),
   addHobbyBtn: $("addHobbyBtn"),
@@ -31,7 +32,6 @@ const els = {
   previewClass: $("previewClass"),
   previewName: $("previewName"),
   previewNickname: $("previewNickname"),
-  previewTags: $("previewTags"),
   previewTalent: $("previewTalent"),
   toast: $("toast"),
   profileCount: $("profileCount"),
@@ -249,19 +249,11 @@ function getProfileFromForm() {
     nickname: normalizeText(els.nickname.value),
     hobbies,
     talent: normalizeText(els.talent.value),
-    tags: normalizeText(els.tags.value),
     theme: els.theme.value,
     orientation: els.orientation.value,
+    printScale: Number(els.printScale.value),
     updatedAt: new Date().toISOString()
   };
-}
-
-// タグが未入力なら趣味から自動生成する
-function autoTags(profile) {
-  // タグが入力済みならそのまま使う。未入力の場合だけ、趣味名からタグを自動生成する。
-  // 空白を削除して、1つの趣味が複数のタグに分かれないようにする。
-  if (profile.tags) return profile.tags;
-  return profile.hobbies.map(h => "#" + h.replace(/\s+/g, "")).join("　");
 }
 
 // 入力内容をリアルタイムでカードプレビューへ反映する
@@ -273,8 +265,10 @@ function updatePreview() {
   els.previewClass.textContent = profile.className;
   els.previewName.textContent = profile.name;
   els.previewNickname.textContent = profile.nickname ? profile.nickname : "nickname";
-  els.previewTags.textContent = autoTags(profile) || "#趣味";
   els.previewTalent.textContent = profile.talent || "特技を入力";
+  els.printScaleValue.value = `${profile.printScale}%`;
+  els.printScaleValue.textContent = `${profile.printScale}%`;
+  els.previewStage.style.setProperty("--print-scale", String(profile.printScale / 100));
 
   els.card.classList.remove("theme-purple", "theme-blue", "theme-green");
   els.card.classList.add(`theme-${profile.theme}`);
@@ -295,11 +289,11 @@ function resetForm() {
   els.className.value = "5J";
   els.nickname.value = "jr（ジュニア）";
   els.talent.value = "指パッチン";
-  els.tags.value = "#ギター #ワンオク #魚釣り #恋バナ #BTS";
   hobbyValues = ["ギター", "魚釣り", "ゲーム", "映画"]; 
   renderHobbies();
   els.theme.value = "blue";
   els.orientation.value = "landscape";
+  els.printScale.value = "100";
   updatePreview();
 }
 
@@ -355,9 +349,9 @@ function loadProfile(id) {
   els.className.value = profile.className || "";
   els.nickname.value = profile.nickname || "";
   els.talent.value = profile.talent || "";
-  els.tags.value = profile.tags || "";
   els.theme.value = profile.theme === "cafe" ? "blue" : profile.theme || "blue";
   els.orientation.value = profile.orientation || "landscape";
+  els.printScale.value = String(profile.printScale || 100);
   renderHobbies(profile.hobbies || []);
   updatePreview();
   showToast("プロフィールを読み込みました");
@@ -394,8 +388,7 @@ function renderSavedList() {
         profile.className,
         profile.nickname,
         ...(profile.hobbies || []),
-        profile.talent,
-        profile.tags
+        profile.talent
       ]
         .join(" ")
         .toLowerCase();
@@ -549,7 +542,6 @@ function renderSavedList() {
 
       <div class="saved-item-meta"></div>
 
-      <div class="saved-item-tags"></div>
     `;
 
 
@@ -565,12 +557,6 @@ function renderSavedList() {
       `${profile.className || "CLASS"} / ` +
       `${(profile.hobbies || []).length}個の趣味` +
       `${profile.nickname ? " / " + profile.nickname : ""}`;
-
-
-    main.querySelector(
-      ".saved-item-tags"
-    ).textContent =
-      autoTags(profile) || "タグなし";
 
 
     // クリックで編集
@@ -850,8 +836,7 @@ function exportProfilesCsv() {
       "趣味4",
       "趣味5",
       "趣味6",
-      "隠れた特技",
-      "ハッシュタグ"
+      "隠れた特技"
     ]
   ];
 
@@ -875,9 +860,7 @@ function exportProfilesCsv() {
       hobbies[4] || "",
       hobbies[5] || "",
 
-      profile.talent,
-
-      autoTags(profile)
+      profile.talent
 
     ]);
 
@@ -927,26 +910,6 @@ function exportProfilesCsv() {
     "人物一覧をCSV出力しました"
   );
 
-}
-
-function wrapText(ctx, text, maxWidth, fontSize) {
-  // CanvasにはHTMLのような自動改行がないため、1文字ずつ幅を測って行を分割する。
-  // 日本語の長いタグでもキャンバスの端からはみ出さないようにするための処理。
-  const chars = [...text];
-  const lines = [];
-  let line = "";
-
-  for (const char of chars) {
-    const test = line + char;
-    if (ctx.measureText(test).width > maxWidth && line) {
-      lines.push(line);
-      line = char;
-    } else {
-      line = test;
-    }
-  }
-  if (line) lines.push(line);
-  return lines;
 }
 
 function loadCardBackground() {
@@ -1051,18 +1014,6 @@ async function drawCardToCanvas(profile, width = 2480, height = 1748) {
   ctx.moveTo(left, top + nameSize*1.26);
   ctx.lineTo(left + nickWidth, top + nameSize*1.26);
   ctx.stroke();
-
-  // Tags
-  const tags = autoTags(profile) || "#趣味";
-  const tagSize = 45 * scale;
-  ctx.fillStyle = "#00baff";
-  ctx.font = `400 ${tagSize}px "Yu Gothic", "Noto Sans JP", sans-serif`;
-  const tagLines = wrapText(ctx, tags, w*.86, tagSize);
-  let tagY = h*.51;
-  tagLines.slice(0, 3).forEach(line => {
-    ctx.fillText(line, left*.42, tagY);
-    tagY += tagSize*1.35;
-  });
 
   // Talent
   ctx.fillStyle = "#fff";

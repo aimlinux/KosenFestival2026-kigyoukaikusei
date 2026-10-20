@@ -81,7 +81,7 @@
             </div>
           </div>
 
-          <!-- カードのテーマと印刷向きを選択 -->
+          <!-- カードのテーマ・印刷向き・印刷倍率を選択 -->
           <div class="two-col">
             <label>テーマ
               <select id="theme">
@@ -98,8 +98,9 @@
             </label>
           </div>
 
-          <label>ハッシュタグ（自動生成・編集可）
-            <input id="tags" maxlength="180" placeholder="#ギター #魚釣り #ゲーム">
+          <label class="print-scale-label" for="printScale">
+            <span>印刷倍率 <output id="printScaleValue" for="printScale">100%</output></span>
+            <input id="printScale" type="range" min="50" max="100" step="5" value="100">
           </label>
         </form>
 
@@ -209,8 +210,6 @@
                   <div id="previewNickname" class="nickname">jr（ジュニア）</div>
                 </div>
 
-                <div id="previewTags" class="tags">#ギター　#　#魚釣り　#恋バナ　#BTS</div>
-
                 <div class="talent-box">
                   <p>隠れた特技：</p>
                   <strong id="previewTalent">指パッチン</strong>
@@ -222,7 +221,7 @@
           <!-- PNG出力とA5印刷に関する注意書き -->
           <div class="export-note">
             <span>✓</span>
-            <p><strong>A5サイズ対応</strong><br>印刷時は「実際のサイズ : 100%」を選択するとカードサイズがA5になります。</p>
+            <p><strong>A5サイズ対応</strong><br>印刷倍率を設定できます。印刷ダイアログでは倍率を「100%」にしてください。</p>
           </div>
         </section>
       </main>

@@ -486,17 +486,6 @@ input:focus, select:focus {
   color: #ffe6b0;
 }
 
-/* 趣味から生成されるハッシュタグ */
-.tags {
-  margin-top: 8.5%;
-  color: #fff5ba;
-  font-size: clamp(11px, 3.9cqw, 48px);
-  line-height: 1.45;
-  max-width: 90%;
-  overflow-wrap: anywhere;
-  text-shadow: 0 0 18px rgba(255, 214, 122, .42);
-}
-
 /* 隠れた特技の表示 */
 .talent-box {
   position: absolute;
@@ -523,6 +512,21 @@ input:focus, select:focus {
 }
 .export-note span { color: #55e6ad; font-size: 16px; }
 .export-note p { margin: 0; }
+
+.print-scale-label > span {
+  display: flex;
+  justify-content: space-between;
+}
+.print-scale-label output {
+  color: var(--accent);
+  font-weight: 700;
+}
+.print-scale-label input {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  accent-color: var(--accent);
+}
 .export-note strong { color: #c8d0df; }
 
 /* 保存などの結果を知らせる通知 */
@@ -630,7 +634,6 @@ input:focus, select:focus {
   .preview-class,
   #previewName,
   #previewNickname,
-  #previewTags,
   .talent-box,
   .glow,
   .line,
@@ -641,7 +644,9 @@ input:focus, select:focus {
 
   #previewStage {
     position: relative !important;
-    display: block !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     width: 210mm !important;
     height: 148mm !important;
     min-height: 0 !important;
@@ -660,6 +665,8 @@ input:focus, select:focus {
     height: 148mm !important;
     aspect-ratio: auto !important;
     margin: 0 !important;
+    transform: scale(var(--print-scale, 1)) !important;
+    transform-origin: center !important;
     border-radius: 0 !important;
     box-shadow: none !important;
     overflow: hidden !important;
@@ -870,21 +877,6 @@ input:focus, select:focus {
 
   color: #8993aa;
 }
-
-.saved-item-tags {
-  margin-top: 4px;
-
-  font-size: 9px;
-
-  color: #d56d3a;
-
-  white-space: nowrap;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-}
-
 
 /* 編集・複製・削除 */
 
