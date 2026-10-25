@@ -35,6 +35,11 @@ const els = {
   previewHobbies: $("previewHobbies"),
   previewTalent: $("previewTalent"),
   toast: $("toast"),
+  printPreviewModal: $("printPreviewModal"),
+  printPreviewImage: $("printPreviewImage"),
+  printPreviewTitle: $("printPreviewTitle"),
+  printPreviewClose: $("printPreviewClose"),
+  printPreviewAction: $("printPreviewAction"),
   profileCount: $("profileCount"),
   profileSearch: $("profileSearch"),
   profileSort: $("profileSort"),
@@ -1109,9 +1114,87 @@ async function downloadPng() {
   }
 }
 
-function printCard() {
-  // 印刷用CSSが適用されるブラウザの印刷画面を開く。
-  window.print();
+const PRINT_EXPORT_DIR_NAME = "KosenFestivalPrints";
+
+async function savePngToPrintFolder(blob, fileName) {
+  if (!window.showDirectoryPicker) return null;
+
+  try {
+    const selectedFolder = await window.showDirectoryPicker({ mode: "readwrite" });
+    const targetFolder = await selectedFolder.getDirectoryHandle(PRINT_EXPORT_DIR_NAME, { create: true });
+    const fileHandle = await targetFolder.getFileHandle(fileName, { create: true });
+    const writable = await fileHandle.createWritable();
+    await writable.write(blob);
+    await writable.close();
+    return { folderName: PRINT_EXPORT_DIR_NAME, fileName };
+  } catch (error) {
+    if (error && error.name === "AbortError") return null;
+    throw error;
+  }
+}
+
+function openPrintPreview(blob, fileName) {
+  const nextUrl = URL.createObjectURL(blob);
+  if (els.printPreviewImage.dataset.objectUrl) {
+    URL.revokeObjectURL(els.printPreviewImage.dataset.objectUrl);
+  }
+
+  els.printPreviewImage.src = nextUrl;
+  els.printPreviewImage.dataset.objectUrl = nextUrl;
+  els.printPreviewImage.alt = `${fileName} の印刷プレビュー`;
+  els.printPreviewTitle.textContent = `${fileName}`;
+  els.printPreviewModal.classList.add("show");
+  els.printPreviewModal.setAttribute("aria-hidden", "false");
+}
+
+function closePrintPreview() {
+  els.printPreviewModal.classList.remove("show");
+  els.printPreviewModal.setAttribute("aria-hidden", "true");
+  if (els.printPreviewImage.dataset.objectUrl) {
+    URL.revokeObjectURL(els.printPreviewImage.dataset.objectUrl);
+    delete els.printPreviewImage.dataset.objectUrl;
+  }
+  els.printPreviewImage.removeAttribute("src");
+}
+
+async function printCard() {
+  try {
+    const profile = getProfileFromForm();
+    const canvas = await drawCardToCanvas(profile);
+    const blob = await new Promise((resolve, reject) => {
+      canvas.toBlob(result => {
+        if (result) resolve(result);
+        else reject(new Error("PNG画像を生成できませんでした"));
+      }, "image/png");
+    });
+
+    const safe = (profile.name || "person-card").replace(/[\\/:*?\"<>|]/g, "_");
+    const fileName = `${safe}_A5.png`;
+
+    try {
+      const saved = await savePngToPrintFolder(blob, fileName);
+      if (saved) {
+        openPrintPreview(blob, fileName);
+        showToast(`${saved.folderName} フォルダにPNGを保存しました`);
+        return;
+      }
+    } catch (error) {
+      console.warn("保存用フォルダの作成に失敗したため、通常のダウンロードへ切り替えます:", error);
+    }
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    openPrintPreview(blob, fileName);
+    showToast("PNGを保存して印刷プレビューを表示しました");
+  } catch (error) {
+    console.error("印刷用PNGの作成に失敗しました:", error);
+    showToast("印刷用PNGの準備に失敗しました");
+  }
 }
 
 els.addHobbyBtn.addEventListener("click", () => {
@@ -1130,6 +1213,18 @@ els.newBtn.addEventListener("click", () => {
 });
 els.printBtn.addEventListener("click", printCard);
 els.pngBtn.addEventListener("click", downloadPng);
+els.printPreviewClose.addEventListener("click", closePrintPreview);
+els.printPreviewAction.addEventListener("click", () => {
+  window.print();
+});
+els.printPreviewModal.addEventListener("click", (event) => {
+  if (event.target === els.printPreviewModal) closePrintPreview();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && els.printPreviewModal.classList.contains("show")) {
+    closePrintPreview();
+  }
+});
 
 els.clearAllBtn.addEventListener("click", () => {
   if (!loadProfiles().length) return;

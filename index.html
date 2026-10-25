@@ -253,6 +253,27 @@
 
   <!-- 保存結果などを一時的に表示する通知 -->
   <div id="toast" class="toast"></div>
+
+  <div id="printPreviewModal" class="print-preview-modal" aria-hidden="true">
+    <div class="print-preview-dialog" role="dialog" aria-modal="true" aria-labelledby="printPreviewTitle">
+      <div class="print-preview-header">
+        <div>
+          <span class="step">STEP 4</span>
+          <h2 id="printPreviewTitle">印刷プレビュー</h2>
+        </div>
+        <button id="printPreviewClose" class="btn ghost small" type="button">閉じる</button>
+      </div>
+
+      <div class="print-preview-stage">
+        <img id="printPreviewImage" alt="印刷用のPNGプレビュー">
+      </div>
+
+      <div class="print-preview-actions">
+        <button id="printPreviewAction" class="btn primary" type="button">この画像を印刷</button>
+      </div>
+    </div>
+  </div>
+
   <!-- アプリの動作を制御するJavaScript -->
   <script src="app.js"></script>
 </body>

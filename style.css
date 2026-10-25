@@ -561,6 +561,74 @@ input:focus, select:focus {
 /* 通知を表示状態に切り替える */
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+.print-preview-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  place-items: center;
+  padding: 24px;
+  background: rgba(17, 12, 10, .58);
+  z-index: 100;
+}
+
+.print-preview-modal.show {
+  display: grid;
+}
+
+.print-preview-dialog {
+  width: min(95vw, 980px);
+  background: linear-gradient(180deg, rgba(255,252,249,.96), rgba(242,233,224,.96));
+  border: 1px solid rgba(126, 85, 61, .12);
+  border-radius: 24px;
+  box-shadow: 0 30px 80px rgba(32, 20, 15, .18);
+  padding: 20px;
+}
+
+.print-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.print-preview-header h2 {
+  margin: 4px 0 0;
+  font-size: 20px;
+}
+
+.print-preview-stage {
+  display: grid;
+  place-items: center;
+  min-height: 420px;
+  padding: 18px;
+  border: 1px solid rgba(150, 107, 87, .12);
+  border-radius: 18px;
+  background:
+    linear-gradient(45deg, rgba(201, 155, 110, .09) 25%, transparent 25%, transparent 75%, rgba(201, 155, 110, .09) 75%),
+    linear-gradient(45deg, rgba(201, 155, 110, .09) 25%, transparent 25%, transparent 75%, rgba(201, 155, 110, .09) 75%),
+    linear-gradient(180deg, rgba(255,255,255,.5), rgba(245,236,227,.9));
+  background-position: 0 0, 12px 12px;
+  background-size: 24px 24px;
+}
+
+#printPreviewImage {
+  display: block;
+  max-width: 100%;
+  max-height: 68vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  box-shadow: 0 18px 50px rgba(67, 36, 18, .16);
+  border-radius: 10px;
+}
+
+.print-preview-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
 /* タブレット向けの1列レイアウト */
 @media (max-width: 1000px) {
   .workspace { grid-template-columns: 1fr; }
@@ -605,100 +673,45 @@ input:focus, select:focus {
     visibility: visible !important;
   }
 
-  .app-shell,
-  .workspace,
-  .panel,
-  .form-panel,
-  .header-actions,
-  .preview-actions,
-  .saved-area,
-  .export-note,
-  .toast,
-  .panel-title,
-  .saved-head,
-  .list-toolbar,
-  .bulk-toolbar,
-  .saved-list,
-  .preview-panel > .panel-title {
+  body > :not(.print-preview-modal) {
     display: none !important;
     visibility: hidden !important;
   }
 
-  .preview-panel {
+  .print-preview-modal {
+    position: static !important;
     display: block !important;
-    width: 210mm !important;
-    height: 148mm !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
     background: transparent !important;
+    padding: 0 !important;
+  }
+
+  .print-preview-dialog {
+    width: 100% !important;
+    max-width: none !important;
+    background: transparent !important;
+    border: 0 !important;
     box-shadow: none !important;
+    padding: 0 !important;
   }
 
-  #previewStage,
-  #previewStage *,
-  #card,
-  #card *,
-  .festival-badge,
-  .identity,
-  .name-row,
-  .preview-class,
-  #previewName,
-  #previewNickname,
-  #previewHobbies,
-  .talent-box,
-  .glow,
-  .line,
-  .card-content {
-    display: block !important;
-    visibility: visible !important;
+  .print-preview-header,
+  .print-preview-actions {
+    display: none !important;
   }
 
-  #previewStage {
-    position: relative !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 210mm !important;
-    height: 148mm !important;
+  .print-preview-stage {
     min-height: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    border: 0 !important;
     background: transparent !important;
-    overflow: hidden !important;
-    box-shadow: none !important;
+    border: 0 !important;
+    padding: 0 !important;
   }
 
-  #card {
-    position: relative !important;
-    display: block !important;
+  #printPreviewImage {
+    max-width: 210mm !important;
+    max-height: 148mm !important;
     width: 210mm !important;
-    height: 148mm !important;
-    aspect-ratio: auto !important;
-    margin: 0 !important;
-    transform: scale(var(--print-scale, 1)) !important;
-    transform-origin: center !important;
-    border-radius: 0 !important;
+    height: auto !important;
     box-shadow: none !important;
-    overflow: hidden !important;
-  }
-
-  .card-content,
-  .identity,
-  .name-row,
-  .talent-box {
-    position: absolute !important;
-    inset: auto !important;
-  }
-
-  .card-content {
-    inset: 0 !important;
-    padding: 5.5% 7.5% !important;
-  }
-
-  .festival-badge {
-    margin-bottom: 10% !important;
   }
 }
 
