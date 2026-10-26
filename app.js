@@ -1057,7 +1057,7 @@ async function drawCardToCanvas(profile, width = 2480, height = 1748) {
   // Talent
   ctx.fillStyle = "#fff";
   const talentText = `隠れた特技：${profile.talent || "特技を入力"}`;
-  const talentSize = fitFontSize(ctx, talentText, 58 * scale, maxNameWidth, 26 * scale);
+  const talentSize = fitFontSize(ctx, talentText, 40 * scale, maxNameWidth, 20 * scale);
   ctx.font = `400 ${talentSize}px "Yu Gothic", "Noto Sans JP", sans-serif`;
   ctx.fillText(talentText, left, h*.88);
 
