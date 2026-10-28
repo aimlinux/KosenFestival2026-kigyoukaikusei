@@ -1,0 +1,316 @@
+
+:root {
+--ink: #183a35;
+--muted: #667873;
+--cream: #f7f5ee;
+--paper: #fffefa;
+--mint: #dbece3;
+--line: #e2e7df;
+--accent: #d6a66b;
+}
+
+* {
+box-sizing: border-box;
+}
+
+html,
+body {
+margin: 0;
+width: 100%;
+height: 100%;
+overflow: hidden;
+}
+
+body {
+background: var(--cream);
+color: var(--ink);
+font-family: "Noto Sans JP", sans-serif;
+}
+
+/* 画面全体 */
+.page {
+width: 100vw;
+height: 100vh;
+padding: 26px 34px 30px;
+display: flex;
+flex-direction: column;
+gap: 18px;
+}
+
+/* タイトル部分 */
+.intro {
+display: flex;
+justify-content: space-between;
+align-items: end;
+gap: 30px;
+flex: 0 0 auto;
+border-bottom: 1px solid #d8dfd5;
+padding-bottom: 16px;
+}
+
+.kicker {
+font: 500 12px "Playfair Display", serif;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: #a87943;
+}
+
+h1 {
+font-size: clamp(26px, 2vw, 38px);
+letter-spacing: -0.04em;
+margin: 5px 0 0;
+line-height: 1.2;
+}
+
+h1 em {
+font-family: "Playfair Display", serif;
+font-weight: 500;
+color: #a87943;
+}
+
+.intro p {
+max-width: 520px;
+margin: 0;
+color: var(--muted);
+font-size: 13px;
+line-height: 1.8;
+text-align: right;
+}
+
+/* 5社を横一列に表示 */
+.companies {
+display: grid;
+grid-template-columns: repeat(5, minmax(0, 1fr));
+gap: 16px;
+flex: 1;
+min-height: 0;
+}
+
+/* 企業カード */
+.company {
+background: var(--paper);
+border: 1px solid var(--line);
+border-radius: 18px;
+overflow: hidden;
+box-shadow: 0 12px 32px #183a350d;
+display: flex;
+flex-direction: column;
+min-width: 0;
+min-height: 0;
+}
+
+/* ロゴ部分 */
+.brand {
+height: 78px;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 10px;
+padding: 12px 12px 6px;
+border-bottom: 1px solid #edf0e9;
+margin: 0 14px 8px;
+}
+
+.brand img {
+width: 44px;
+height: 44px;
+object-fit: contain;
+flex-shrink: 0;
+}
+
+.brand-word {
+font: 600 12px "Playfair Display", "Noto Sans JP", serif;
+letter-spacing: 0.04em;
+color: #315d51;
+text-align: left;
+line-height: 1.35;
+overflow-wrap: anywhere;
+}
+
+/* 企業名 */
+.company-top {
+padding: 12px 18px 10px;
+display: flex;
+gap: 10px;
+align-items: flex-start;
+}
+
+.num {
+font: 500 14px "Playfair Display", serif;
+color: #b78c5b;
+padding-top: 4px;
+flex-shrink: 0;
+}
+
+h3 {
+margin: 0;
+font-size: clamp(16px, 1.15vw, 21px);
+line-height: 1.45;
+letter-spacing: -0.03em;
+overflow-wrap: anywhere;
+}
+
+.category {
+display: inline-block;
+margin-top: 9px;
+font-size: 10px;
+line-height: 1.5;
+letter-spacing: 0.03em;
+color: #47776b;
+background: #e8f2ec;
+padding: 6px 9px;
+border-radius: 20px;
+}
+
+/* 事業内容 */
+.description {
+font-size: clamp(12px, 0.8vw, 14px);
+line-height: 1.9;
+color: #566862;
+margin: 0;
+padding: 0 18px 18px;
+flex: 1;
+}
+
+/* QRコード部分 */
+.links {
+border-top: 1px solid var(--line);
+padding: 16px 12px 18px;
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 9px;
+margin-top: auto;
+}
+
+.qr-link {
+background: #fbfbf6;
+border: 1px solid #e6e9e1;
+border-radius: 12px;
+padding: 10px 5px;
+text-align: center;
+text-decoration: none;
+min-width: 0;
+}
+
+.qr-link img {
+width: min(100%, 124px);
+aspect-ratio: 1;
+object-fit: contain;
+display: block;
+margin: 0 auto 9px;
+image-rendering: pixelated;
+}
+
+.qr-link strong {
+display: block;
+font-size: 11px;
+line-height: 1.5;
+}
+
+.qr-link small {
+display: block;
+font-size: 9px;
+color: #71817a;
+margin-top: 4px;
+}
+
+/* URL未設定時の表示 */
+.qr-fallback {
+width: min(100%, 124px);
+aspect-ratio: 1;
+margin: 0 auto 9px;
+display: grid;
+place-items: center;
+background: #f0f0e9;
+color: #8b918a;
+font-size: 10px;
+line-height: 1.6;
+border: 1px dashed #cbd1c7;
+border-radius: 5px;
+}
+
+/* 公式サイトへのリンク */
+.visit {
+padding: 0 18px 18px;
+}
+
+.visit a {
+font-size: 11px;
+text-decoration: none;
+color: #2d7160;
+border-bottom: 1px solid #a7c8b8;
+padding-bottom: 3px;
+}
+
+.visit a:after {
+content: " ↗";
+}
+
+.pill {
+display: inline-block;
+font-size: 10px;
+color: #9b6c38;
+border: 1px solid #e6d3b7;
+padding: 5px 9px;
+border-radius: 30px;
+}
+
+/* FHDより小さい画面 */
+@media (max-width: 1200px) {
+html,
+body {
+height: auto;
+overflow: auto;
+}
+
+.page {
+height: auto;
+min-height: 100vh;
+width: 100%;
+padding: 20px;
+overflow: visible;
+}
+
+.companies {
+grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.intro {
+align-items: flex-start;
+flex-direction: column;
+}
+
+.intro p {
+text-align: left;
+}
+
+.company {
+min-height: 520px;
+}
+}
+
+/* 印刷用 */
+@media print {
+html,
+body {
+height: 100%;
+overflow: hidden;
+}
+
+.page {
+height: 100vh;
+padding: 20px;
+}
+
+.companies {
+gap: 10px;
+}
+
+.company {
+box-shadow: none;
+}
+
+.qr-link {
+break-inside: avoid;
+}
+}
