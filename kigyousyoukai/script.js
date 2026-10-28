@@ -150,9 +150,9 @@ container.innerHTML = companies.map((company, index) => `
     ${escapeHTML(company.description)}
 </p>
 
-<div class="links">
+<div class="links${company.recruit ? "" : " links--single"}">
     ${makeQR(company.website, "公式ホームページ")}
-    ${makeQR(company.recruit, "採用ページ")}
+    ${company.recruit ? makeQR(company.recruit, "採用ページ") : ""}
 </div>
 
 <div class="visit">
