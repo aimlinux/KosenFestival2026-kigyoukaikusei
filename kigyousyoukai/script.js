@@ -127,7 +127,7 @@ const container = document.getElementById("companies");
 container.innerHTML = companies.map((company, index) => `
 <article class="company">
 
-<div class="brand${company.logo ? " brand--with-logo" : ""}">
+<div class="brand${company.logo ? " brand--with-logo" : ""}${company.logoClass === "company-logo--takuram" ? " brand--takuram" : ""}">
     ${
     company.logo || company.domain
         ? `<img
