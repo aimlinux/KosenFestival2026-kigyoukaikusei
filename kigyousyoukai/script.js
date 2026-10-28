@@ -3,6 +3,8 @@ const companies = [
 {
 name: "株式会社八雲ソフトウェア",
 domain: "8clouds.co.jp",
+logo: "assets/logos/yakumo.png",
+logoClass: "company-logo--yakumo",
 category: "IT・ソフトウェア開発",
 description:
     "業務システムやWeb・スマートフォンアプリの開発に加え、kintoneなどを活用したDX推進・業務改善を支援するソフトウェア企業です。",
@@ -13,6 +15,8 @@ label: "YAKUMO SOFTWARE"
 {
 name: "鳥取電業株式会社",
 domain: "www.tottoridengyo.co.jp",
+logo: "assets/logos/tottori-fit.png",
+logoClass: "company-logo--tottori",
 category: "電気・設備・地域インフラ",
 description:
     "住宅・産業・情報関連製品の販売、設備工事、上下水道ポンプなどの保守管理を通じて地域の暮らしを支えています。",
@@ -23,6 +27,8 @@ label: "TOTTORI DENGYO"
 {
 name: "岡田電工株式会社",
 domain: "okakou.sdgr.co.jp",
+logo: "assets/logos/okada.png",
+logoClass: "company-logo--okada",
 category: "電気・水道・空調・通信工事",
 description:
     "米子市西福原に本社を置き、電気・水道・空調・通信工事を通じて、快適で安心な暮らしづくりや地域づくりに貢献しています。",
@@ -33,6 +39,8 @@ label: "OKADA DENKO"
 {
 name: "美保テクノス株式会社",
 domain: "www.miho.co.jp",
+logo: "assets/logos/miho-fit.png",
+logoClass: "company-logo--miho",
 category: "総合建設・まちづくり",
 description:
     "土木・建築工事をはじめ、道路維持管理、地盤改良、住宅、設計などを通じて地域のまちづくりに取り組んでいます。",
@@ -43,6 +51,8 @@ label: "MIHO TECHNOS"
 {
 name: "株式会社takuram",
 domain: "www.your-support.or.jp",
+logo: "assets/logos/takuram-fit.png",
+logoClass: "company-logo--takuram",
 category: "経営伴走支援・会計・税務",
 description:
     "米子市を拠点に、地域の中小企業に対する経営改善や経営人材育成など、経営課題の解決を伴走支援しています。",
@@ -117,13 +127,14 @@ const container = document.getElementById("companies");
 container.innerHTML = companies.map((company, index) => `
 <article class="company">
 
-<div class="brand">
+<div class="brand${company.logo ? " brand--with-logo" : ""}">
     ${
-    company.domain
+    company.logo || company.domain
         ? `<img
-            src="${createLogo(company.domain)}"
+            class="${escapeHTML(company.logoClass || "")}"
+            src="${escapeHTML(company.logo || createLogo(company.domain))}"
             alt="${escapeHTML(company.name)}のロゴ"
-            onerror="this.style.display='none'">`
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">`
         : ""
     }
 
