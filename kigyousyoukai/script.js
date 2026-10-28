@@ -41,14 +41,14 @@ recruit: "https://www.miho.co.jp/recruit/recruit_01.html",
 label: "MIHO TECHNOS"
 },
 {
-name: "株式会社TAKURAMI",
-domain: "takurami.jp",
-category: "イベント企画・演出・空間づくり",
+name: "株式会社takuram",
+domain: "www.your-support.or.jp",
+category: "経営伴走支援・会計・税務",
 description:
-    "イベントの企画・コンサルティング、制作・演出、運営進行、施工・空間創造などを手がけています。",
-website: "https://takurami.jp/web/",
+    "米子市を拠点に、地域の中小企業に対する経営改善や経営人材育成など、経営課題の解決を伴走支援しています。",
+website: "https://www.your-support.or.jp/",
 recruit: "",
-label: "TAKURAMI"
+label: "TAKURAM"
 }
 ];
 
