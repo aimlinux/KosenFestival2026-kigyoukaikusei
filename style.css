@@ -486,9 +486,19 @@ input:focus, select:focus {
   color: #ffe6b0;
 }
 
+/* クラスの展示・企画 */
+.exhibition-display {
+  margin-top: 2.5%;
+  color: #ffe6b0;
+  font-size: clamp(10px, 2.1cqw, 26px);
+  line-height: 1.35;
+  max-width: 90%;
+  overflow-wrap: anywhere;
+}
+
 /* 趣味の表示 */
 .hobby-display {
-  margin-top: 7%;
+  margin-top: 4.5%;
   color: #fff;
   font-size: clamp(11px, 2.7cqw, 34px);
   line-height: 1.45;

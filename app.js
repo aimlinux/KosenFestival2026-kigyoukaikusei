@@ -11,6 +11,7 @@ const els = {
   name: $("name"),
   className: $("className"),
   nickname: $("nickname"),
+  exhibition: $("exhibition"),
   talent: $("talent"),
   theme: $("theme"),
   orientation: $("orientation"),
@@ -32,6 +33,7 @@ const els = {
   previewClass: $("previewClass"),
   previewName: $("previewName"),
   previewNickname: $("previewNickname"),
+  previewExhibition: $("previewExhibition"),
   previewHobbies: $("previewHobbies"),
   previewTalent: $("previewTalent"),
   toast: $("toast"),
@@ -254,6 +256,7 @@ function getProfileFromForm() {
     name: normalizeText(els.name.value) || "名前未入力",
     className: normalizeText(els.className.value) || "CLASS",
     nickname: normalizeText(els.nickname.value),
+    exhibition: normalizeText(els.exhibition.value),
     hobbies,
     talent: normalizeText(els.talent.value),
     theme: els.theme.value,
@@ -272,6 +275,7 @@ function updatePreview() {
   els.previewClass.textContent = profile.className;
   els.previewName.textContent = profile.name;
   els.previewNickname.textContent = profile.nickname ? profile.nickname : "nickname";
+  els.previewExhibition.textContent = `クラスの展示：${profile.exhibition || "展示内容を入力"}`;
   els.previewHobbies.textContent = `趣味：${profile.hobbies.join("・") || "未入力"}`;
   els.previewTalent.textContent = profile.talent || "特技を入力";
   els.printScaleValue.value = `${profile.printScale}%`;
@@ -351,6 +355,7 @@ function loadProfile(id) {
   els.name.value = profile.name || "";
   els.className.value = profile.className || "";
   els.nickname.value = profile.nickname || "";
+  els.exhibition.value = profile.exhibition || "";
   els.talent.value = profile.talent || "";
   els.theme.value = profile.theme === "cafe" ? "blue" : profile.theme || "blue";
   els.orientation.value = profile.orientation || "landscape";
@@ -390,6 +395,7 @@ function renderSavedList() {
         profile.name,
         profile.className,
         profile.nickname,
+        profile.exhibition,
         ...(profile.hobbies || []),
         profile.talent
       ]
@@ -833,6 +839,7 @@ function exportProfilesCsv() {
       "名前",
       "クラス",
       "ニックネーム",
+      "クラスの展示・企画",
       "趣味1",
       "趣味2",
       "趣味3",
@@ -861,6 +868,8 @@ function exportProfilesCsv() {
       profile.className,
 
       profile.nickname,
+
+      profile.exhibition,
 
       ...Array.from({ length: MAX_HOBBIES }, (_, index) => hobbies[index] || ""),
 
@@ -1031,6 +1040,22 @@ async function drawCardToCanvas(profile, width = 2480, height = 1748) {
   ctx.moveTo(left, top + nameSize*1.26);
   ctx.lineTo(left + nickWidth, top + nameSize*1.26);
   ctx.stroke();
+
+  // Class exhibition
+  const exhibitionText = `クラスの展示：${profile.exhibition || "展示内容を入力"}`;
+  let exhibitionSize = 36 * scale;
+  let exhibitionLines;
+  do {
+    ctx.font = `400 ${exhibitionSize}px "Yu Gothic", "Noto Sans JP", sans-serif`;
+    exhibitionLines = wrapText(ctx, exhibitionText, maxNameWidth);
+    if (exhibitionLines.length <= 2) break;
+    exhibitionSize *= .9;
+  } while (exhibitionSize > 20 * scale);
+  const exhibitionLineHeight = exhibitionSize * 1.25;
+  const exhibitionStartY = top + nameSize * 1.7;
+  exhibitionLines.forEach((line, index) => {
+    ctx.fillText(line, left, exhibitionStartY + index * exhibitionLineHeight);
+  });
 
   // Hobbies
   const hobbyText = (profile.hobbies || []).join("・") || "未入力";
