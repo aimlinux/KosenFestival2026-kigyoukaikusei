@@ -21,14 +21,14 @@ recruit: "https://www.tottoridengyo.co.jp/recruit/",
 label: "TOTTORI DENGYO"
 },
 {
-name: "岡田工業",
-domain: "",
-category: "事業内容・公式URLの確認が必要",
+name: "岡田電工株式会社",
+domain: "okakou.sdgr.co.jp",
+category: "電気・水道・空調・通信工事",
 description:
-    "同名の企業が複数あるため、正式な社名と公式ホームページを確認後に事業内容とQRコードを設定してください。",
-website: "",
-recruit: "",
-label: "OKADA KOGYO"
+    "米子市西福原に本社を置き、電気・水道・空調・通信工事を通じて、快適で安心な暮らしづくりや地域づくりに貢献しています。",
+website: "https://okakou.sdgr.co.jp/",
+recruit: "https://okakou.sdgr.co.jp/recruit/",
+label: "OKADA DENKO"
 },
 {
 name: "美保テクノス株式会社",
