@@ -22,7 +22,10 @@ overflow: hidden;
 }
 
 body {
-background: var(--cream);
+background:
+radial-gradient(ellipse at 12% 8%, #b4cabb 0, transparent 36%),
+radial-gradient(ellipse at 92% 88%, #d2b58f 0, transparent 40%),
+linear-gradient(135deg, #d5d9c9 0%, #c4d2c7 48%, #e0d1b9 100%);
 color: var(--ink);
 font-family: "Noto Sans JP", sans-serif;
 }
@@ -112,14 +115,14 @@ margin: 0 14px 8px;
 }
 
 .brand img {
-width: 44px;
-height: 44px;
+width: 56px;
+height: 56px;
 object-fit: contain;
 flex-shrink: 0;
 }
 
 .brand-word {
-font: 600 12px "Playfair Display", "Noto Sans JP", serif;
+font: 600 14px "Playfair Display", "Noto Sans JP", serif;
 letter-spacing: 0.04em;
 color: #315d51;
 text-align: left;
@@ -144,7 +147,7 @@ flex-shrink: 0;
 
 h3 {
 margin: 0;
-font-size: clamp(16px, 1.15vw, 21px);
+font-size: clamp(18px, 1.35vw, 24px);
 line-height: 1.45;
 letter-spacing: -0.03em;
 overflow-wrap: anywhere;
