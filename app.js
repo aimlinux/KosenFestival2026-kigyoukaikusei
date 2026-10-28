@@ -290,14 +290,9 @@ function updatePreview() {
 // フォームを初期状態に戻して新規作成モードへ切り替える
 function resetForm() {
   // 新規作成ボタンや全削除後に呼び出し、編集中のIDとフォームを初期状態に戻す。
-  // サンプル値を入れて、画面を開いた直後でもカードの見た目を確認できるようにする。
   currentId = null;
   els.form.reset();
-  els.name.value = "小原和真";
-  els.className.value = "5J";
-  els.nickname.value = "jr（ジュニア）";
-  els.talent.value = "指パッチン";
-  hobbyValues = ["ギター", "魚釣り", "ゲーム", "映画"]; 
+  hobbyValues = [];
   renderHobbies();
   els.theme.value = "blue";
   els.orientation.value = "landscape";
